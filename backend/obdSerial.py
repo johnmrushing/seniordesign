@@ -45,7 +45,7 @@ while(ser.inWaiting() >1):
 print(res)
 
 while(1):
-	input = '01 05 0C'
+	input = '01 0C 0D'
 	ser.write(input + '\r\n')
 	time.sleep(0.1)
 	ser.flush()
@@ -53,8 +53,16 @@ while(1):
 	while(ser.inWaiting() >1):
 		res += ser.read()
 	print(res)
-
-
-
+	hexnumber = res.split(" ")
+	for x in range(len(hexnumber)):
+		if (hexnumber[x] == "0C"):
+			A = int(hexnumber[x+1],16)
+			B = int(hexnumber[x+2],16)
+			rpm = (256*A + B)/4
+			print(rpm)
+		if (hexnumber[x] == "0D"):
+			A = int(hexnumber[x+1],16)
+			MPH = int(A*(.621))
+			print(MPH)
 
 ser.close()
