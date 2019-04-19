@@ -30,8 +30,6 @@ res = []
 i = 0;
 while(ser.inWaiting() >0):
 	res.append(ser.read()) #= ser.read()
-	if (res[i] == '>'):
-		print("Hello")
 	i += 1
 print(res)
 
@@ -52,17 +50,18 @@ while(1):
 	res = ''
 	while(ser.inWaiting() >1):
 		res += ser.read()
-	print(res)
-	hexnumber = res.split(" ")
+	#print(res)
+	hexnumber = res.split("\r")
+	hexnumber = hexnumber[1].split(" ")
 	for x in range(len(hexnumber)):
-		if (hexnumber[x] == "0C"):
+		if (x == 1):
 			A = int(hexnumber[x+1],16)
 			B = int(hexnumber[x+2],16)
 			rpm = (256*A + B)/4
-			print(rpm)
-		if (hexnumber[x] == "0D"):
+			print('RPM : '+ repr(rpm))
+		if (x==4):
 			A = int(hexnumber[x+1],16)
 			MPH = int(A*(.621))
-			print(MPH)
+			print('MPH : '+ repr(MPH))
 
 ser.close()
