@@ -1,7 +1,11 @@
 import time
 import serial
 import io
-
+import socketio
+num = 0
+sio = socketio.Client()
+sio.connect('http://localhost')
+"""
 ser = serial.Serial(
 	port='COM3',
 	baudrate=9600,
@@ -58,6 +62,7 @@ def init():
 		print(repr(error))
 
 def decode(res):
+	data[0,0]
 	hexnumber = res.split("\r")
 	hexnumber = hexnumber[1].split(" ")
 	for x in range(len(hexnumber)):
@@ -65,14 +70,24 @@ def decode(res):
 			A = int(hexnumber[x+1],16)
 			B = int(hexnumber[x+2],16)
 			rpm = (256*A + B)/4
+			data[0] = rpm
 			print('RPM : '+ repr(rpm))
 		if (x==4):
 			A = int(hexnumber[x+1],16)
 			MPH = int(A*(.621))
+			data[1] = MPH
 			print('MPH : '+ repr(MPH))
-			
-def loop():
-	init()
+	return data
+"""
+def loop(num):
+	#init()
+	while(1):
+		if num == 141:
+			num = 0
+		sio.emit('obd-in', [num,num])
+		num = num + 1
+		time.sleep(0.1)
+	"""
 	while(1):
 		input = '01 0C 0D'
 		ser.write(input + '\r\n')
@@ -81,8 +96,9 @@ def loop():
 		res = ''
 		while(ser.inWaiting() >1):
 			res += ser.read()
-		decode(res)
+		data = decode(res)
+		sio.emit('obd-in', data)
 	ser.close()
-
+"""
 if __name__ == '__main__':
-	loop()
+	loop(num)
