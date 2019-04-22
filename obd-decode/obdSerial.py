@@ -5,7 +5,7 @@ import socketio
 num = 0
 sio = socketio.Client()
 sio.connect('http://localhost')
-"""
+
 ser = serial.Serial(
 	port='COM3',
 	baudrate=9600,
@@ -78,16 +78,9 @@ def decode(res):
 			data[1] = MPH
 			print('MPH : '+ repr(MPH))
 	return data
-"""
+
 def loop(num):
-	#init()
-	while(1):
-		if num == 141:
-			num = 0
-		sio.emit('obd-in', [num,num])
-		num = num + 1
-		time.sleep(0.1)
-	"""
+	init()
 	while(1):
 		input = '01 0C 0D'
 		ser.write(input + '\r\n')
@@ -99,6 +92,17 @@ def loop(num):
 		data = decode(res)
 		sio.emit('obd-in', data)
 	ser.close()
-"""
+	
 if __name__ == '__main__':
 	loop(num)
+	
+	
+	"""
+	while(1):
+		if num == 141:
+			num = 0
+		sio.emit('obd-in', [num,num])
+		num = num + 1
+		time.sleep(0.1)
+	"""
+	
