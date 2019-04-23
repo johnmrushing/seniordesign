@@ -19,6 +19,7 @@ export class Guage extends Component {
     componentDidMount() {
         let that = this;
         socket.on('obd-out',function(data) {
+			console.log(data)
             that.setState({rpm: data[0]/1000,speed: data[1]});
         });
     }
