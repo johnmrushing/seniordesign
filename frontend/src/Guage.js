@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import ReactSpeedometer from "react-d3-speedometer"
 import socketIOClient from "socket.io-client";
+import Container from 'react-bootstrap/Container'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
 let socket = socketIOClient("http://localhost/");
 
 export class Guage extends Component {
@@ -27,34 +30,114 @@ export class Guage extends Component {
     render() {
         return (
             <div>
-                <p>RPM x 1000</p>
-                {this.state.rpm}
-                <ReactSpeedometer
-                    maxValue={10}
-                    value={this.state.rpm}
-                    needleColor="black"
-                    startColor="orange"
-                    segments={10}
-                    endColor="red"
-                    needleTransition={"easeBackOut"}
-                    ringWidth={40}
-                    textColor={"red"}
+                <Container>
+                    <Row className="justify-content-md-center"  >
 
-                />
-                <p>Speed </p>
-                {this.state.speed}
-                <ReactSpeedometer
-                    maxValue={200}
-                    value={this.state.speed}
-                    needleColor="black"
-                    startColor="orange"
-                    segments={10}
-                    endColor="red"
-                    needleTransition={"easeBackOut"}
-                    ringWidth={40}
-                    textColor={"red"}
+                        <Col>
+                            <p>RPM x 1000</p>
+                            {this.state.rpm}
+                            <ReactSpeedometer
+                                maxValue={10}
+                                value={this.state.rpm}
+                                needleColor="black"
+                                startColor="orange"
+                                segments={10}
+                                endColor="red"
+                                needleTransition={"easeBackOut"}
+                                ringWidth={40}
+                                textColor={"red"}
 
-                />
+                            />
+
+                        </Col>
+                        <Col>
+                            <p>Speed </p>
+                            {this.state.speed}
+                            <ReactSpeedometer
+                                maxValue={200}
+                                value={this.state.speed}
+                                needleColor="black"
+                                startColor="orange"
+                                segments={10}
+                                endColor="red"
+                                needleTransition={"easeBackOut"}
+                                ringWidth={40}
+                                textColor={"red"}
+
+                            />
+                        </Col>
+                        <Col>
+                            <p>Speed </p>
+                            {this.state.speed}
+                            <ReactSpeedometer
+                                maxValue={200}
+                                value={this.state.speed}
+                                needleColor="black"
+                                startColor="orange"
+                                segments={10}
+                                endColor="red"
+                                needleTransition={"easeBackOut"}
+                                ringWidth={40}
+                                textColor={"red"}
+
+                            />
+                        </Col>
+                    </Row>
+                    <Row className="justify-content-md-center"  >
+
+                        <Col>
+                            <p>RPM x 1000</p>
+                            {this.state.rpm}
+                            <ReactSpeedometer
+                                maxValue={10}
+                                value={this.state.rpm}
+                                needleColor="black"
+                                startColor="orange"
+                                segments={10}
+                                endColor="red"
+                                needleTransition={"easeBackOut"}
+                                ringWidth={40}
+                                textColor={"red"}
+
+                            />
+
+                        </Col>
+                        <Col>
+                            <p>Speed </p>
+                            {this.state.speed}
+                            <ReactSpeedometer
+                                maxValue={200}
+                                value={this.state.speed}
+                                needleColor="black"
+                                startColor="orange"
+                                segments={10}
+                                endColor="red"
+                                needleTransition={"easeBackOut"}
+                                ringWidth={40}
+                                textColor={"red"}
+
+                            />
+                        </Col>
+                        <Col>
+                            <p>Speed </p>
+                            {this.state.speed}
+                            <ReactSpeedometer
+                                maxValue={200}
+                                value={this.state.speed}
+                                needleColor="black"
+                                startColor="orange"
+                                segments={10}
+                                endColor="red"
+                                needleTransition={"easeBackOut"}
+                                ringWidth={40}
+                                textColor={"red"}
+
+                            />
+                        </Col>
+                    </Row>
+                </Container>
+
+
             </div>
         )
     }
