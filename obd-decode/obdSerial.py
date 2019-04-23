@@ -5,7 +5,7 @@ import socketio
 num = 0
 sio = socketio.Client()
 sio.connect('http://localhost')
-
+#dev/tty
 ser = serial.Serial(
 	port='COM3',
 	baudrate=9600,
