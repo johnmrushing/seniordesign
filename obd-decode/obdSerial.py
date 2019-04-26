@@ -7,7 +7,7 @@ sio = socketio.Client()
 sio.connect('http://localhost')
 #dev/tty
 ser = serial.Serial(
-	port='COM3',
+	port='/dev/ttyUSB0',
 	baudrate=9600,
 	parity=serial.PARITY_NONE,
 	stopbits=serial.STOPBITS_ONE,
@@ -26,13 +26,13 @@ def init():
 			res += ser.read()
 		print("This is serial res")
 		print(res)
-		if res != "ELM327 v1.3a"
+                if res != "ELM327 v1.3a":
 			raise Exception('Did not receive expected response')
 		
 		#STEP 2:
 		#Attempt to send 'ATSP0'
 		input = 'ATSP0'
-		ser.write(input + '\r\n'*)
+		ser.write(input + '\r\n')
 		time.sleep(1)
 		ser.flush()
 		res = []
@@ -41,7 +41,7 @@ def init():
 			res.append(ser.read()) #= ser.read()
 			i += 1
 		print(res)
-		if res[6:8] != "OK"
+                if res[6:8] != "OK":
 			raise Exception('Did not receive expected response')
 		
 		#STEP 3:
@@ -55,14 +55,14 @@ def init():
 		while(ser.inWaiting() >1):
 			res += ser.read()
 		print(res)
-		if res[0:2] != "41"
+                if res[0:2] != "41":
 			raise Exception('Did not receive expected response')
 			
 	except Exception as error:
 		print(repr(error))
 
 def decode(res):
-	data[0,0]
+	data = [0,0]
 	hexnumber = res.split("\r")
 	hexnumber = hexnumber[1].split(" ")
 	for x in range(len(hexnumber)):
