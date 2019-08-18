@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import ReactSpeedometer from "react-d3-speedometer"
 import socketIOClient from "socket.io-client";
-
+import Card from 'react-bootstrap/Card';
 let socket = socketIOClient("http://localhost/");
 
 export class Tachometer extends Component {

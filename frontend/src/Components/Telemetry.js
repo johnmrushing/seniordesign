@@ -23,7 +23,7 @@ export class Telemetry extends Component {
                            <TelemetryCard data = {"Speed"}/>
                         </Col>
                         <Col>
-                            <TelemetryCard data = {"Speed"}/>
+                            <TelemetryCard data = {"RPM"}/>
                         </Col>
                         <Col>
                             <TelemetryCard data = {"Speed"}/>

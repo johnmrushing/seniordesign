@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Card from 'react-bootstrap/Card';
 import {SettingsButton} from "./SettingsButton";
 import {Speedometer} from "./Speedometer";
-
+import {Tachometer} from "./Tachometer";
 
 export class TelemetryCard extends Component {
     constructor(props) {
@@ -33,11 +33,13 @@ export class TelemetryCard extends Component {
                 <Card style={{height: '17rem'}}>
                     <SettingsButton show = {this.handleClick}/>
                     {
-                        this.state.show ?  <p> ok</p>:null
+                        //(this.state.show) ?  <p> ok</p> : null;
                         // (this.state.display === "digital") ? null:null
 
+                        this.state.data === "Speed" ? <Speedometer/> : <Tachometer/>
+
                     }
-                    <Speedometer/>
+
                 </Card>
             </div>
         )
