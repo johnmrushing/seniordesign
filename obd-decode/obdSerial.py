@@ -2,10 +2,18 @@ import time
 import serial
 import io
 import socketio
+import threading
+import json
+import datetime
+
 num = 0
+begin = False
+stop = False
+log = {}
+fileName = ""
 sio = socketio.Client()
 sio.connect('http://localhost')
-#dev/tty
+
 ser = serial.Serial(
 	port='/dev/ttyUSB0',
 	baudrate=9600,
@@ -13,6 +21,8 @@ ser = serial.Serial(
 	stopbits=serial.STOPBITS_ONE,
 	bytesize=serial.EIGHTBITS,
 )
+
+
 def init():
 	try:
 		#STEP 1:
@@ -79,8 +89,44 @@ def decode(res):
 			print('MPH : '+ repr(MPH))
 	return data
 
-def loop(num):
-	init()
+def message_handler(msg):
+	global begin, fileName, log, stop
+	print('test: ', msg)
+	begin = msg
+	stop = False
+	fileName = str(datetime.datetime.now().strftime("%Y-%m-%d %H.%M.%S"))
+	with open(str(fileName+".json"), 'a') as outfile:
+		outfile.write('[')
+
+def stop_handler(msg):
+	global stop
+	print('test: ', msg)
+	stop = msg
+	
+def send(res):
+	global begin, stop
+	data = decode(res)	
+	sio.emit('obd-in', [data,data])
+	print("Sent data to server")
+	
+	sio.on("start", message_handler)
+	sio.on("stop", stop_handler)
+	if(begin == True):
+		log['date'] = datetime.datetime.now().isoformat()
+		log['speed'] = data
+		log['rpm'] = data
+		with open(str(fileName+".json"), 'a') as outfile:
+			json.dump((log), outfile)
+			if(stop == True):
+				outfile.write(']')
+				begin = False
+			else:
+				outfile.write(',')
+		print("finished logging")
+
+def loop(num): 
+	
+	#init()
 	while(1):
 		input = '01 0C 0D'
 		ser.write(input + '\r\n')
@@ -88,21 +134,11 @@ def loop(num):
 		ser.flush()
 		res = ''
 		while(ser.inWaiting() >1):
-			res += ser.read()
-		data = decode(res)
-		sio.emit('obd-in', data)
+			res += ser.read()	
+		t1 = threading.Thread(target=send, args=(res,))
+		t1.start() 
+		num = num + 1
 	ser.close()
 	
 if __name__ == '__main__':
 	loop(num)
-	
-	
-	"""
-	while(1):
-		if num == 141:
-			num = 0
-		sio.emit('obd-in', [num,num])
-		num = num + 1
-		time.sleep(0.1)
-	"""
-	
