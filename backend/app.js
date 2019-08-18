@@ -19,6 +19,15 @@ io.on('connection', function (socket) {
     socket.broadcast.emit("obd-out", data);
   });
 
+  socket.on('begin',function (data) {
+      socket.broadcast.emit("start",data)
+  });
+
+  socket.on('end',function (data) {
+    socket.broadcast.emit("stop",data)
+  });
+
+
   socket.on('disconnect', function (data){
     console.log("Socket Disconnected");
   });
