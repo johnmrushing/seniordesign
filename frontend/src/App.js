@@ -1,19 +1,17 @@
-import React, { Component } from 'react';
 import './App.css';
-import {Guage} from "./Guage";
+import React, { Component } from 'react';
+import {Telemetry} from "./Components/Telemetry";
+import {Header} from "./Components/Header";
 
 export class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <h1>OBDII data stream test</h1>
-        </header>
-          <Guage/>
+          <Header/>
+          <Telemetry/>
       </div>
     );
   }
-
 }
 
 export default App;

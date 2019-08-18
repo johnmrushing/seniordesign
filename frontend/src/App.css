@@ -1,15 +1,22 @@
 .App {
   text-align: center;
 }
-
-
-
 .App-header {
   background-color: white;
-  display: flex;
-  flex-direction: column;
-  font-size: calc(10px + 2vmin);
+  text-align: center;
   color: #282c34;
+}
+.float-left{
+  position:absolute;
+  float: left;
+  margin-left:65px;
+}
+.float-right{
+  margin-right: 23px;
+}
+.settings{
+  margin-top: 6px;
+  margin-right: -296px;
 }
 
 .App-link {
