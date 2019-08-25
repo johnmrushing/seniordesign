@@ -8,7 +8,7 @@ export class Tachometer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            rpm: this.props.rpm,
+            rpm: null
         };
     }
 
@@ -27,7 +27,7 @@ export class Tachometer extends Component {
                     <p>RPM x 1000</p>
                     <ReactSpeedometer
                         maxValue={10}
-                        value={this.state.rpm/100}
+                        value={this.state.rpm/1000}
                         needleColor="black"
                         startColor="orange"
                         segments={10}

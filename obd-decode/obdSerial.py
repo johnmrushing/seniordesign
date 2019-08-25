@@ -6,7 +6,6 @@ import threading
 import json
 import datetime
 
-num = 0
 begin = False
 stop = False
 log = {}
@@ -102,43 +101,39 @@ def stop_handler(msg):
 	global stop
 	print('test: ', msg)
 	stop = msg
-	
-def send(res):
-	global begin, stop
-	data = decode(res)	
-	sio.emit('obd-in', [data,data])
-	print("Sent data to server")
-	
-	sio.on("start", message_handler)
-	sio.on("stop", stop_handler)
-	if(begin == True):
-		log['date'] = datetime.datetime.now().isoformat()
-		log['speed'] = data
-		log['rpm'] = data
-		with open(str(fileName+".json"), 'a') as outfile:
-			json.dump((log), outfile)
-			if(stop == True):
-				outfile.write(']')
-				begin = False
-			else:
-				outfile.write(',')
-		print("finished logging")
 
-def loop(num): 
-	
-	#init()
+def loop(): 
+	global begin, stop
+	init()
 	while(1):
 		input = '01 0C 0D'
 		ser.write(input + '\r\n')
-		time.sleep(0.1)
+		time.sleep(0.2)
 		ser.flush()
 		res = ''
 		while(ser.inWaiting() >1):
-			res += ser.read()	
-		t1 = threading.Thread(target=send, args=(res,))
-		t1.start() 
-		num = num + 1
+			res += ser.read()
+		if(res != ''):
+			print(res)
+			data = decode(res)	
+			sio.emit('obd-in', data)
+			print("Sent data to server")
+		
+			sio.on("start", message_handler)
+			sio.on("stop", stop_handler)
+			if(begin == True):
+				log['date'] = datetime.datetime.now().isoformat()
+				log['speed'] = data[1]
+				log['rpm'] = data[0]
+				with open(str(fileName+".json"), 'a') as outfile:
+					json.dump((log), outfile)
+					if(stop == True):
+						outfile.write(']')
+						begin = False
+					else:
+						outfile.write(',')
+				print("finished logging")
 	ser.close()
 	
 if __name__ == '__main__':
-	loop(num)
+	loop()

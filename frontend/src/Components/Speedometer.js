@@ -8,7 +8,7 @@ export class Speedometer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            speed: this.props.speed,
+            speed: null,
         };
     }
 
