@@ -1,75 +1,89 @@
 import time
 import serial
 import io
-import socketio
+#import socketio
 import threading
 import json
 import datetime
 
 begin = False
 stop = False
+OBDtime = ""
 log = {}
 fileName = ""
-sio = socketio.Client()
-sio.connect('http://localhost')
+response = []
 
 ser = serial.Serial(
 	port='/dev/ttyUSB0',
-	baudrate=9600,
+	baudrate=10000,
 	parity=serial.PARITY_NONE,
 	stopbits=serial.STOPBITS_ONE,
 	bytesize=serial.EIGHTBITS,
+	timeout=0.1,#0.01
 )
-
+sio = io.TextIOWrapper(io.BufferedRWPair(ser, ser))
 
 def init():
 	try:
 		#STEP 1:
 		#Attempt to send 'ATZ'
-		input = 'ATZ'
-		ser.write(input + '\r\n')
+		input = 'ATZ\r'
+		sio.write(unicode(input))
+		sio.flush()
 		time.sleep(1)
-		ser.flush()
-		res = ''
-		while(ser.inWaiting() >1):
-			res += ser.read()
+		res = sio.readlines()
 		print("This is serial res")
 		print(res)
-                if res != "ELM327 v1.3a":
-			raise Exception('Did not receive expected response')
 		
 		#STEP 2:
 		#Attempt to send 'ATSP0'
-		input = 'ATSP0'
-		ser.write(input + '\r\n')
+		input = 'ATSP0\r'
+		sio.write(unicode(input))
+		sio.flush()
 		time.sleep(1)
-		ser.flush()
-		res = []
-		i = 0;
-		while(ser.inWaiting() >1):
-			res.append(ser.read()) #= ser.read()
-			i += 1
+		res = sio.readlines()
 		print(res)
-                if res[6:8] != "OK":
-			raise Exception('Did not receive expected response')
 		
 		#STEP 3:
 		#Attempt to send '0100'
-		input = '0100'
-		ser.write(input + '\r\n')
+		input = '0100\r'
+		sio.write(unicode(input))
 		#we need to test reducing this
-		time.sleep(5)
-		ser.flush()
-		res = ''
-		while(ser.inWaiting() >1):
-			res += ser.read()
+		sio.flush()
+		time.sleep(10)
+		res = sio.readlines()
 		print(res)
-                if res[0:2] != "41":
-			raise Exception('Did not receive expected response')
-			
+		
+		input = 'at h1\r'
+		sio.write(unicode(input))
+		sio.flush()
+		time.sleep(1)
+		res = sio.readlines()
+		print(res)
+		
+		
 	except Exception as error:
 		print(repr(error))
 
+def logging(data):
+	global begin, fileName, log, stop
+	sio.on("start", begin_handler)
+	sio.on("stop", stop_handler)
+	if(begin == True):
+		log['date'] = datetime.datetime.now().isoformat()
+		log['speed'] = data[1]
+		log['rpm'] = data[0]
+		#log gps coords here
+		with open(str(fileName+".json"), 'a') as outfile:
+			json.dump((log), outfile)
+			if(stop == True):
+				outfile.write(']')
+				#stop recording video
+				begin = False
+			else:
+				outfile.write(',')
+		print("finished logging")
+		
 def decode(res):
 	data = [0,0]
 	hexnumber = res.split("\r")
@@ -102,38 +116,32 @@ def stop_handler(msg):
 	print('test: ', msg)
 	stop = msg
 
+def read():
+	global response, OBDtime
+	input = '01 0C 0D 0F 05 11\r'
+	sio.write(unicode(input))
+	sio.flush()
+	#time.sleep(0.1)
+	response = sio.readlines()
+	OBDtime = datetime.datetime.now().isoformat()
+	
+	
 def loop(): 
-	global begin, stop
+	global response, begin, stop,OBDtime
 	init()
 	while(1):
-		input = '01 0C 0D'
-		ser.write(input + '\r\n')
-		time.sleep(0.2)
-		ser.flush()
-		res = ''
-		while(ser.inWaiting() >1):
-			res += ser.read()
-		if(res != ''):
-			print(res)
-			data = decode(res)	
-			sio.emit('obd-in', data)
-			print("Sent data to server")
+		response = []
+		t1 = threading.Thread(target=read)
+		t1.start() 
+		#gps =go get GPS data
 		
-			sio.on("start", message_handler)
-			sio.on("stop", stop_handler)
-			if(begin == True):
-				log['date'] = datetime.datetime.now().isoformat()
-				log['speed'] = data[1]
-				log['rpm'] = data[0]
-				with open(str(fileName+".json"), 'a') as outfile:
-					json.dump((log), outfile)
-					if(stop == True):
-						outfile.write(']')
-						begin = False
-					else:
-						outfile.write(',')
-				print("finished logging")
-	ser.close()
+		if(response != []):
+			data = decode(res)	  #fix decoder
+			sio.emit('obd-in', data)	
+			print(OBDtime)
+			print(response)
+		logging(data,gps,obdTime)
+	
 	
 if __name__ == '__main__':
 	loop()
