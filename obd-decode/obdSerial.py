@@ -9,20 +9,18 @@ import datetime
 begin = False
 stop = False
 newOBD = False
+obd_string = ""
+i= 0
 OBDtime = ""
 log = {}
 fileName = ""
 response = []
 
-OBD_DICT = {'00': 0, '05': 1, '0C': 2, '0D': 1, '0F': 1, '11': 1}
-OBD_LOG = {'Engine coolant temperature': 0, 'Engine RPM': 0, 'Vehicle Speed': 0, 'Intake Air Temperature': 0,'Throttle Position': 0}
-OBD_FUNC = {'05': ECT_Decode, '0C': RPM_Decode, '0D': MPH_Decode, '0F': IAT_Decode, '11': TP_Decode}
-
 sockets = socketio.Client()
 sockets.connect('http://localhost')
 ser = serial.Serial(
     port='/dev/ttyUSB0',
-    baudrate=10000,
+    baudrate=9600,
     parity=serial.PARITY_NONE,
     stopbits=serial.STOPBITS_ONE,
     bytesize=serial.EIGHTBITS,
@@ -100,8 +98,12 @@ def TP_Decode():
 	OBD_data = round(float((float(100) / 255) * A), 3)
 	OBD_LOG['Throttle Position'] = OBD_data
 
+OBD_DICT = {'00': 0, '05': 1, '0C': 2, '0D': 1, '0F': 1, '11': 1}
+OBD_LOG = {'Engine coolant temperature': 0, 'Engine RPM': 0, 'Vehicle Speed': 0, 'Intake Air Temperature': 0,'Throttle Position': 0}
+OBD_FUNC = {'05': ECT_Decode, '0C': RPM_Decode, '0D': MPH_Decode, '0F': IAT_Decode, '11': TP_Decode}
+
 def decode(rawData):
-	global OBD_DICT, OBD_LOG, OBD_FUNC
+	global OBD_DICT, OBD_LOG, OBD_FUNC, obd_string, i
 	OBD_LOG = {'Engine coolant temperature': 0, 'Engine RPM': 0, 'Vehicle Speed': 0, 'Intake Air Temperature': 0,'Throttle Position': 0}
 	a = ''
 	b = ''
@@ -164,7 +166,7 @@ def stop_handler(msg):
 	stop = msg
 
 def read():
-	global response, OBDtime
+	global response, OBDtime, newOBD
 	while (1):
 		input = '01 0C 0D 0F 05 11\r'
 		sio.write(unicode(input))
@@ -181,19 +183,19 @@ def loop():
 	t1 = threading.Thread(target=read)
 	t1.start()
 	while (1):
-		gps = "GPS DATA" #go get GPS data
+		gps = datetime.datetime.now().isoformat() #go get GPS data
 		time.sleep(0.1)
 		if (newOBD == True):
+			print(response)
+			print(datetime.datetime.now().isoformat())
 			decode(response)
-			data = json.dump(OBD_LOG)
+			data = json.dumps(OBD_LOG)
 			sockets.emit('obd-in', data)
-			print(data)
 			newOBD = False
-		logging(gps, obdTime)
-		print(datetime.datetime.now().isoformat())
+		logging(gps, OBDtime)
 
 if __name__ == '__main__':
 	try:
 		loop()
 	except KeyboardInterrupt:
-		sio.close()
+		print("Exiting...")
