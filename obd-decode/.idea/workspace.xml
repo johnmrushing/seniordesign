@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="42573a39-fc80-4fb8-96e5-9f8ff1351b9a" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/PossibleCodes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obdSerial.py" beforeDir="false" afterPath="$PROJECT_DIR$/obdSerial.py" afterDir="false" />
     </list>
@@ -16,22 +17,45 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/obdSerial.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-498">
-              <caret line="150" lean-forward="true" selection-start-line="150" selection-end-line="150" />
+            <state relative-caret-position="-1350">
+              <caret line="109" column="35" lean-forward="true" selection-start-line="109" selection-start-column="4" selection-end-line="109" selection-end-column="35" />
+              <folding>
+                <element signature="e#0#11#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/PossibleCodes.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="756">
+              <caret line="49" column="13" selection-start-line="49" selection-start-column="13" selection-end-line="49" selection-end-column="13" />
+              <folding>
+                <element signature="e#0#13#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
   <component name="FindInProjectRecents">
     <findStrings>
       <find>json</find>
       <find>data</find>
       <find>log</find>
+      <find>01</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -41,6 +65,7 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/obdSerial.py" />
+        <option value="$PROJECT_DIR$/PossibleCodes.py" />
       </list>
     </option>
   </component>
@@ -100,12 +125,12 @@
       <updated>1559074113745</updated>
       <workItem from="1559074115337" duration="819000" />
       <workItem from="1567487432897" duration="161000" />
-      <workItem from="1567542391517" duration="3421000" />
+      <workItem from="1567542391517" duration="7011000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4401000" />
+    <option name="totallyTimeSpent" value="7991000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="2576" height="1416" extended-state="6" />
@@ -140,8 +165,21 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/obdSerial.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-498">
-          <caret line="150" lean-forward="true" selection-start-line="150" selection-end-line="150" />
+        <state relative-caret-position="-1350">
+          <caret line="109" column="35" lean-forward="true" selection-start-line="109" selection-start-column="4" selection-end-line="109" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PossibleCodes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="756">
+          <caret line="49" column="13" selection-start-line="49" selection-start-column="13" selection-end-line="49" selection-end-column="13" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

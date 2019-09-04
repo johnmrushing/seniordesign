@@ -20,7 +20,7 @@ sockets = socketio.Client()
 sockets.connect('http://localhost')
 ser = serial.Serial(
     port='/dev/ttyUSB0',
-    baudrate=9600,
+    baudrate=10000,
     parity=serial.PARITY_NONE,
     stopbits=serial.STOPBITS_ONE,
     bytesize=serial.EIGHTBITS,
