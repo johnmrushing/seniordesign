@@ -9,8 +9,8 @@ export class Telemetry extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            rpm: this.props.rpm,
-            speed: this.props.speed,
+            rawData: this.props.rawData,
+            possibleCodes: this.props.possibleCodes,
         };
     }
 
