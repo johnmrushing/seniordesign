@@ -9,8 +9,7 @@ export class Telemetry extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            rawData: this.props.rawData,
-            possibleCodes: this.props.possibleCodes,
+            rawData: this.props.rawData
         };
     }
 
@@ -18,27 +17,27 @@ export class Telemetry extends Component {
         return (
             <div>
                 <Container>
-                    <Row className="justify-content-md-center"  >
+                    <Row className="justify-content-md-center">
                         <Col>
-                           <TelemetryCard data = {"Speed"}/>
+                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData}/>
                         </Col>
                         <Col>
-                            <TelemetryCard data = {"RPM"}/>
+                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData}/>
                         </Col>
                         <Col>
-                            <TelemetryCard data = {"Speed"}/>
+                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData}/>
                         </Col>
                     </Row>
                     <br/>
-                    <Row className="justify-content-md-center"  >
+                    <Row className="justify-content-md-center">
                         <Col>
-                            <TelemetryCard data = {"Speed"}/>
+                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData}/>
                         </Col>
                         <Col>
-                            <TelemetryCard data = {"Speed"}/>
+                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData}/>
                         </Col>
                         <Col>
-                            <TelemetryCard data = {"Speed"}/>
+                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData}/>
                         </Col>
                     </Row>
                 </Container>

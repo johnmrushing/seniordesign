@@ -2,6 +2,8 @@ import './App.css';
 import React, { Component } from 'react';
 import {Telemetry} from "./Components/Telemetry";
 import {Header} from "./Components/Header";
+import socketIOClient from "socket.io-client";
+let socket = socketIOClient("http://localhost/");
 
 export class App extends Component {
     constructor(props) {
@@ -17,9 +19,9 @@ export class App extends Component {
             console.log(data);
             that.setState({rawData: data});
         });
-        socket.on('possibleCodes',function(possibleData) {
-            console.log(possibleData);
-            that.setState({possibleCodes: possibleData});
+        socket.on('possibleCodes',function(data) {
+            console.log(data);
+            that.setState({possibleCodes: data});
         });
     }
     render() {

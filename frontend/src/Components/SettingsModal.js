@@ -11,7 +11,7 @@ export class SettingsModal extends Component {
         this.state = {
             display: "digital",
             data: this.props.data,
-            show: false,
+            show: true,
         };
     }
 
@@ -30,11 +30,8 @@ export class SettingsModal extends Component {
         return (
             <div>
 
-                <Button variant="light" className = {"settings"} onClick={this.handleClick}>
-                    <Image src={img} roundedCircle />
-                </Button>
                 <Modal show={this.state.show} onHide={this.handleClose} size="lg"
-                       aria-labelledby="contained-modal-title-vcenter" centered className="DB-Modal">
+                       aria-labelledby="contained-modal-title-vcenter" centered>
 
                     <Modal.Header closeButton>
                         <Modal.Title id="contained-modal-title-vcenter">DB Deployment</Modal.Title>
