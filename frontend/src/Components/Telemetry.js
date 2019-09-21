@@ -19,25 +19,25 @@ export class Telemetry extends Component {
                 <Container>
                     <Row className="justify-content-md-center">
                         <Col>
-                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData}/>
+                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} key = {1}/>
                         </Col>
                         <Col>
-                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData}/>
+                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} key = {2}/>
                         </Col>
                         <Col>
-                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData}/>
+                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} key = {3}/>
                         </Col>
                     </Row>
                     <br/>
                     <Row className="justify-content-md-center">
                         <Col>
-                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData}/>
+                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} key = {4}/>
                         </Col>
                         <Col>
-                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData}/>
+                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} key = {5}/>
                         </Col>
                         <Col>
-                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData}/>
+                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} key = {6}/>
                         </Col>
                     </Row>
                 </Container>

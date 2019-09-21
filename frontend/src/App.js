@@ -15,6 +15,7 @@ export class App extends Component {
     }
     componentDidMount() {
         let that = this;
+        that.setState({possibleCodes: ["Speed","RPM", "Throttle Position"]});
         socket.on('obd-out',function(data) {
             console.log(data);
             that.setState({rawData: data});

@@ -10,22 +10,25 @@ export class SettingsButton extends Component {
     constructor(props) {
         super(props);
         this.handleClick = this.handleClick.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        this.handleSelect = this.handleSelect.bind(this);
         this.state = {
             show: false
         };
     }
 
     handleClick() {
-        if(this.state.show) {
-            this.setState({
-                show: false
-            });
-        }
-        else{
-            this.setState({
-                show: true
-            });
-        }
+        this.setState({
+            show: true
+        });
+    }
+    handleClose() {
+        this.setState({
+            show: false
+        });
+    }
+    handleSelect(obj){
+        this.props.selectedData(obj)
     }
 
     render() {
@@ -35,7 +38,7 @@ export class SettingsButton extends Component {
                     <Image src={img} roundedCircle/>
                 </Button>
                 {
-                    this.state.show ? <SettingsModal/> : null
+                    this.state.show ? <SettingsModal show = {this.state.show} onClick = {this.handleClick} onClose = {this.handleClose} possibleCodes = {this.props.possibleCodes} onSelect = {this.handleSelect}/> : null
                 }
             </div>
         )
