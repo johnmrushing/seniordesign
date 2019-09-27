@@ -29,6 +29,9 @@ export class SettingsButton extends Component {
     }
     handleSelect(obj){
         this.props.selectedData(obj)
+        this.setState({
+            show: false
+        });
     }
 
     render() {

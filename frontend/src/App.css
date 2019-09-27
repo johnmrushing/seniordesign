@@ -15,8 +15,12 @@
   margin-right: 23px;
 }
 .settings{
-  margin-top: 6px;
-  margin-right: -296px;
+  display: flex;
+  position:absolute;
+}
+.card{
+  height: 11rem;
+  width: 13rem;
 }
 
 .App-link {

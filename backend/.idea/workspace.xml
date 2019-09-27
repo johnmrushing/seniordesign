@@ -3,7 +3,18 @@
   <component name="ChangeListManager">
     <list default="true" id="77a5665d-3b51-4ba3-b468-fadaebde0bc9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../frontend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/Components/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/Components/Header.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/Components/SettingsButton.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/Components/SettingsButton.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/Components/SettingsModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/Components/SettingsModal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/Components/TelemetryCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/Components/TelemetryCard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../obd-decode/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../obd-decode/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../obd-decode/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../obd-decode/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../obd-decode/.idea/obd-decode.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../obd-decode/.idea/obd-decode.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../obd-decode/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../obd-decode/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../obd-decode/obdSerial.py" beforeDir="false" afterPath="$PROJECT_DIR$/../obd-decode/obdSerial.py" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -16,11 +27,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="223">
-              <caret line="18" column="20" selection-start-line="18" selection-start-column="20" selection-end-line="18" selection-end-column="20" />
+            <state relative-caret-position="551">
+              <caret line="35" column="5" selection-start-line="35" selection-start-column="5" selection-end-line="35" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -30,11 +41,11 @@
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/package.json">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="375">
-              <caret line="15" column="26" selection-start-line="15" selection-start-column="26" selection-end-line="15" selection-end-column="26" />
+              <caret line="15" column="25" selection-start-line="15" selection-start-column="25" selection-end-line="15" selection-end-column="25" />
             </state>
           </provider>
         </entry>
@@ -84,8 +95,8 @@
         <option value="$PROJECT_DIR$/secret/twitter.js" />
         <option value="$PROJECT_DIR$/client.js" />
         <option value="$PROJECT_DIR$/testdata.json" />
-        <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/app.js" />
       </list>
     </option>
   </component>
@@ -183,17 +194,18 @@
       <workItem from="1566061056068" duration="6506000" />
       <workItem from="1566143923073" duration="541000" />
       <workItem from="1566151846103" duration="124000" />
+      <workItem from="1569457740037" duration="1585000" />
+      <workItem from="1569593215247" duration="599000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="97007000" />
+    <option name="totallyTimeSpent" value="99191000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="2576" height="1416" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.12411348" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.09259259" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info id="npm" order="3" side_tool="true" />
@@ -206,7 +218,7 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="9" sideWeight="0.49881798" visible="true" weight="0.4169914" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="9" sideWeight="0.49881798" visible="true" weight="0.29929852" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.501182" side_tool="true" weight="0.23694466" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -242,20 +254,20 @@
     <entry file="file://$APPLICATION_CONFIG_DIR$/javascript/nodejs/10.15.1/core-modules/fs.js" />
     <entry file="file://$PROJECT_DIR$/testdata.json" />
     <entry file="file://$PROJECT_DIR$/node_modules/serialport/lib/index.js" />
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="223">
-          <caret line="18" column="20" selection-start-line="18" selection-start-column="20" selection-end-line="18" selection-end-column="20" />
+        <state relative-caret-position="551">
+          <caret line="35" column="5" selection-start-line="35" selection-start-column="5" selection-end-line="35" selection-end-column="5" />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="375">
-          <caret line="15" column="26" selection-start-line="15" selection-start-column="26" selection-end-line="15" selection-end-column="26" />
+          <caret line="15" column="25" selection-start-line="15" selection-start-column="25" selection-end-line="15" selection-end-column="25" />
         </state>
       </provider>
     </entry>

@@ -38,9 +38,9 @@ export class Header extends Component {
                     <Button  onClick={this.handleStop} variant="primary">Save</Button>
                 </div>
                 <div>
-                    <header>
-                        <h1>OBDII Data Logger</h1>
-                    </header>
+
+                    <br></br>
+
                 </div>
 
                 <br/>

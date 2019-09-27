@@ -24,18 +24,16 @@ export class TelemetryCard extends Component {
 
     render() {
         return (
-            <div>
-                <Card style={{height: '17rem'}}>
+                <Card className = {"card"}>
                     <SettingsButton possibleCodes = {this.props.possibleCodes} selectedData = {this.updateSelectedData}/>
+                    <Card.Title>{(this.state.selectedData!= null) ? <h6>{this.state.selectedData}</h6> :null}</Card.Title>
                     <Card.Body>
-                        <Card.Title>{(this.state.selectedData!= null) ? this.state.selectedData:null}</Card.Title>
                         {
 
-                            (this.state.selectedData!= null && this.state.rawData!= null)  ? <p>{this.state.rawData.selectedData}</p>: null
+                            (this.state.selectedData!= null && this.state.rawData!= null) ? <p>{this.state.rawData.selectedData}</p>: null
                         }
                     </Card.Body>
                 </Card>
-            </div>
         )
     }
 

@@ -10,12 +10,17 @@ import os
 begin = False
 stop = False
 newOBD = False
+initialBegin = False
 obd_string = ""
 i= 0
 OBDtime = ""
 log = {}
 fileName = ""
 response = []
+VIN = ""
+t2= ""
+possibleCodes= []
+selectedCodes = ""
 
 sockets = socketio.Client()
 sockets.connect('http://localhost')
@@ -60,21 +65,59 @@ def init():
         res = sio.readlines()
         print(res)
 
-        # input = 'ATAT0\r'
-        # sio.write(str(input))
-        # sio.flush()
-        # time.sleep(1)
-        # res = sio.readlines()
-        # print(res)
-		#
-        # input = 'at st 16\r'
-        # sio.write(str(input))
-        # sio.flush()
-        # time.sleep(1)
-        # res = sio.readlines()
-        # print(res)
-    except Exception as error:
-        print(repr(error))
+		# STEP 4:
+		# Attempt to send '0902' for VIN
+		input = '0902\r'
+		sio.write(str(input))
+		sio.flush()
+		time.sleep(2)
+		res = sio.readlines()
+		print(res)
+		VIN_Decode(res)
+		
+	except Exception as error:
+		print(repr(error))
+
+def VIN_Decode(res):
+	global VIN, possibleCodes
+	print(res)
+	#decodedVin = ... res to get vin
+	#VIN = decodedVin
+	if(os.path.exist('profiles/'+VIN+'.txt')):
+		f = open('profiles/'+VIN+'.txt')
+		contents = f.read()
+		print(contents)
+		possibleCodes = contents
+		sockets.emit('possibleCodes', possibleCodes)
+		f.close()
+		#need to figure out where we want to convert codes to string
+	else:
+		possibleCodes = possibleCodesScan()
+		print(possibleCodes)
+		f = open('profiles/'+VIN+'.txt',"w+")
+		f.write(possibleCodes)
+		sockets.emit('possibleCodes', possibleCodes)
+		f.close()
+		
+def possibleCodesScan():
+	work = []
+	dontwork = []
+	for i in range(0, len(codes)):
+	input = "01" + OBD_CODES[i] + "\r"
+	sio.write(unicode(input))
+	sio.flush()
+	time.sleep(0.2)
+	response = sio.readlines()
+	print(response)
+	for j in range(0,len(response)):
+		if j == 1:
+			if(response[j] != u'NO DATA\n'):
+				work.append(OBD_CODES[i])
+			else:
+				dontwork.append(OBD_CODES[i])
+
+	print("Scan is complete")
+	return work
 
 def CEL_Decode():
     A = int(obd_string[i+1],16)
@@ -412,7 +455,7 @@ def AEPT_Decode():
 OBD_DICT = {'00' : 0,'04' : 1,'05' : 1,'06' : 1,'07' : 1,'08' : 1,'09' : 1,'0C' : 2,'0D' : 1,'0E' : 1,'0F' : 1,'10' : 2,'11' : 1,'15' : 2,'19' : 2,'1A' : 2,'1F' : 2,'21' : 2,'24' : 4,'28' : 4,'29' : 4,'2B' : 4,'2E' : 1,'30' : 1,'31' : 2,'33' : 1,'34' : 4,'35' : 4,'37' : 4,'38' : 4,'39' : 4,'3B' : 4,'3C' : 2,'3D' : 2,'3E' : 2,'3F' : 2,'42' : 2,'43' : 2,'44' : 2,'45' : 1,'47' : 1,'49' : 1,'4A' : 1,'4C' : 1,'4D' : 2,'4E' : 2,'4F' : 4,'50' : 4,'52' : 1,'53' : 2,'62' : 1}
 OBD_LOG = {}
 OBD_FUNC = {'04' : CEL_Decode,'05' : ECT_Decode,'06' : STFTB1_Decode,'07' : LTFTB1_Decode,'08' : STFTB2_Decode,'09' : LTFTB2_Decode,'0C' : RPM_Decode,'0D' : MPH_Decode,'0E' : TA_Decode,'0F' : IAT_Decode,'10' : MAFAFR_Decode,'11' : TP_Decode,'15' : OSVSTFTB2_Decode,'19' : OSVSTFTB6_Decode,'1A' : OSVSTFTB7_Decode,'1F' : RTSES_Decode,'21' : DTWMILO_Decode,'24' : OSABCDFAERVB8_Decode,'28' : OSABCDFAERVB5_Decode,'29' : OSABCDFAERVB6_Decode,'2B' : OSABCDFAERVB8_Decode,'2E' : CEP_Decode,'30' : WUSCC_Decode,'31' : DTSCC_Decode,'33' : ABP_Decode,'34' : OSABCDFAERCB1_Decode,'35' : OSABCDFAERCB2_Decode,'37' : OSABCDFAERCB4_Decode,'38' : OSABCDFAERCB5_Decode,'39' : OSABCDFAERCB6_Decode,'3B' : OSABCDFAERCB8_Decode,'3C' : CTB1S1_Decode,'3D' : CTB2S1_Decode,'3E' : CTB1S2_Decode,'3F' : CTB2S2_Decode,'42' : CMV_Decode,'43' : ALV_Decode,'44' : FACER_Decode,'45' : RTP_Decode,'47' : ATPB_Decode,'49' : APPD_Decode,'4A' : APPE_Decode,'4C' : CTA_Decode,'4D' : TRWMILO_Decode,'4E' : TSTCC_Decode,'4F' : MVFFAEROSVOSCAIMAP_Decode,'50' : MVFAFRFMAFS_Decode,'52' : EF_Decode,'53' : AESVP_Decode,'62' : AEPT_Decode}
-
+OBD_CODES = ["00","01","02","03","04","05","06","07","08","09","0A","0B","0C","0D","0E","0F","1","10","11","12","13","14","15","16","17","18","19","1A","1B","1C","1D","1E","1F","2","20","21","22","23","24","25","26","27","28","29","2A","2B","2C","2D","2E","2F","3","30","31","32","33","34","35","36","37","38","39","3A","3B","3C","3D","3E","3F","4","40","41","42","43","44","45","46","47","48","49","4A","4B","4C","4D","4E","4F","5","50","51","52","53","54","55","56","57","58","59","5A","5B","5C","5D","5E","5F","6","60","61","62","63","64","65","66","67","68","69","6A","6B","6C","6D","6E","6F","7","70","71","72","73","74","75","76","77","78","79","7A","7B","7C","7D","7E","7F","8","80","81","82","83","84","85","86","87","88","89","8A","8B","8C","8D","8E","8F","9","90","91","92","93","94","98","99","9A","9B","9C","9D","9E","9F","A0","A1","A2","A3","A4","A5","A6","C0","C3","C4"]
 def decode(rawData):
 	global OBD_DICT, OBD_LOG, OBD_FUNC, obd_string, i
 	
@@ -439,15 +482,19 @@ def decode(rawData):
 		obd_string.pop()
 
 	i = 1
+	obd_cnt = 0
 	while i < len(obd_string):
 		obd_code = OBD_DICT[obd_string[i]]
 		if (obd_code != 0):
 			obd_data = OBD_FUNC[obd_string[i]]()
+			obd_cnt +=1
 			#print(obd_data)
+		if (obd_cnt == 5):
+			break
 		i += (obd_code+1)
 
 def logging(gps, obdTime):
-    global begin, fileName, log, stop
+    global begin, fileName, log, stop, t2
     sockets.on("start", message_handler)
     sockets.on("stop", stop_handler)
     if (begin == True):
@@ -459,16 +506,16 @@ def logging(gps, obdTime):
                 outfile.write(']')
                 os.system("sudo killall ffmpeg")
                 begin = False
+				t2.join()
             else:
                 outfile.write(',')
-        print("finished logging")
+    	print("finished logging")
 
 def record():
-	global stop
 	os.system("recordvideo")
 	
 def message_handler(msg):
-	global begin, fileName, stop
+	global begin, fileName, stop, t2
 	print('test: ', msg)
 	begin = msg
 	stop = False
@@ -484,20 +531,26 @@ def stop_handler(msg):
 	stop = msg
 
 def read():
-	global response, OBDtime, newOBD
+	global response, OBDtime, newOBD, selectedCodes
 	while (1):
-		input = '01 0C 0D 0F 05 11\r'
+		input = selectedCodes+'\r'
 		sio.write(str(input))
 		sio.flush()
 		time.sleep(0.1)
 		response = sio.readlines()
 		newOBD = True
 		OBDtime = datetime.datetime.now().isoformat()
-
+def selectedCodes_handler(msg):
+	global selectedCodes
+	selectedCodes = msg
+	
 def loop():
 	global response, begin, stop, OBDtime, newOBD
 	data = ""
 	init()
+	sockets.on("selectedCodes", selectedCodes_handler)
+	while(selectedCodes == ""):
+		print("waiting for user selection")
 	t1 = threading.Thread(target=read)
 	t1.start()
 	while (1):

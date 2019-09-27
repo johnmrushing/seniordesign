@@ -27,7 +27,13 @@ io.on('connection', function (socket) {
     socket.broadcast.emit("stop",data)
   });
 
+  socket.on('possibleCodes',function (data) {
+    socket.broadcast.emit("frontEndPossibleCodes",data)
+  });
 
+  socket.on('userSelectedCodes',function (data) {
+    socket.broadcast.emit("selectedCodes",data)
+  });
   socket.on('disconnect', function (data){
     console.log("Socket Disconnected");
   });

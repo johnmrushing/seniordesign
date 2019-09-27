@@ -28,7 +28,7 @@ export class SettingsModal extends Component {
         return (
             <div>
 
-                <Modal show={this.props.show} onHide={this.handleClose} size="lg"
+                <Modal show={this.props.show} onHide={this.handleClose} size="sm"
                        aria-labelledby="contained-modal-title-vcenter" centered>
 
                     <Modal.Header closeButton>
@@ -43,7 +43,7 @@ export class SettingsModal extends Component {
                                     {
                                         this.props.possibleCodes.map((obj) => {
                                             return (
-                                                <Dropdown.Item onClick={() =>{this.props.onSelect(obj)}}>{obj}</Dropdown.Item>
+                                                <Dropdown.Item onClick={() =>{this.props.onSelect(obj)} }>{obj}</Dropdown.Item>
                                             )
                                         })
                                     }
