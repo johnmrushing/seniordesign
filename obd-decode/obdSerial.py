@@ -36,34 +36,34 @@ sio = io.TextIOWrapper(io.BufferedRWPair(ser, ser))
 
 def init():
     try:
-        # STEP 1:
-        # Attempt to send 'ATZ'
-        input = 'ATZ\r'
-        sio.write(str(input))
-        sio.flush()
-        time.sleep(1)
-        res = sio.readlines()
-        print("This is serial res")
-        print(res)
+		# STEP 1:
+		# Attempt to send 'ATZ'
+		input = 'ATZ\r'
+		sio.write(str(input))
+		sio.flush()
+		time.sleep(1)
+		res = sio.readlines()
+		print("This is serial res")
+		print(res)
 
-        # STEP 2:
-        # Attempt to send 'ATSP0'
-        input = 'ATSP0\r'
-        sio.write(str(input))
-        sio.flush()
-        time.sleep(1)
-        res = sio.readlines()
-        print(res)
+		# STEP 2:
+		# Attempt to send 'ATSP0'
+		input = 'ATSP0\r'
+		sio.write(str(input))
+		sio.flush()
+		time.sleep(1)
+		res = sio.readlines()
+		print(res)
 
-        # STEP 3:
-        # Attempt to send '0100'
-        input = '0100\r'
-        sio.write(str(input))
-        # we need to test reducing this
-        sio.flush()
-        time.sleep(10)
-        res = sio.readlines()
-        print(res)
+		# STEP 3:
+		# Attempt to send '0100'
+		input = '0100\r'
+		sio.write(str(input))
+		# we need to test reducing this
+		sio.flush()
+		time.sleep(10)
+		res = sio.readlines()
+		print(res)
 
 		# STEP 4:
 		# Attempt to send '0902' for VIN
@@ -74,7 +74,6 @@ def init():
 		res = sio.readlines()
 		print(res)
 		VIN_Decode(res)
-		
 	except Exception as error:
 		print(repr(error))
 
@@ -118,18 +117,18 @@ def possibleCodesScan():
 	work = []
 	dontwork = []
 	for i in range(0, len(codes)):
-	input = "01" + OBD_CODES[i] + "\r"
-	sio.write(unicode(input))
-	sio.flush()
-	time.sleep(0.2)
-	response = sio.readlines()
-	print(response)
-	for j in range(0,len(response)):
-		if j == 1:
-			if(response[j] != u'NO DATA\n'):
-				work.append(OBD_CODES[i])
-			else:
-				dontwork.append(OBD_CODES[i])
+		input = "01" + OBD_CODES[i] + "\r"
+		sio.write(unicode(input))
+		sio.flush()
+		time.sleep(0.2)
+		response = sio.readlines()
+		print(response)
+		for j in range(0,len(response)):
+			if j == 1:
+				if(response[j] != u'NO DATA\n'):
+					work.append(OBD_CODES[i])
+				else:
+					dontwork.append(OBD_CODES[i])
 
 	print("Scan is complete")
 	return work
