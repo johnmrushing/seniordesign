@@ -97,9 +97,10 @@ def VIN_Decode(res):
 	VIN_hex = VIN_hex.replace('\n','')
 	VIN = bytes.fromhex(VIN_hex).decode('utf-8')
 	print(VIN)
-	if(os.path.exists('profiles/'+VIN+'.txt')):
-		f = open('profiles/'+VIN+'.txt')
-		contents = f.read()
+	contents = ""
+	if(os.path.exists('profiles/'+VIN+'.json')):
+		with open("profiles/"+VIN+ ".json") as outfile:
+			contents = json.loads(outfile)
 		print(contents)
 		possibleCodes = contents
 		sockets.emit('possibleCodes', possibleCodes)
@@ -108,15 +109,15 @@ def VIN_Decode(res):
 	else:
 		possibleCodes = possibleCodesScan()
 		print(possibleCodes)
-		f = open('profiles/'+VIN+'.txt',"w+")
-		f.write(str(possibleCodes))
-		sockets.emit('possibleCodes', possibleCodes)
+		with open("profiles/"+VIN+ ".json", w) as outfile:
+			json.dump(possibleCodes, outfile)
+		sockets.emit('possibleCodes', json.dumps(possibleCodes))
 		f.close()
 		
 def possibleCodesScan():
-	work = []
-	dontwork = []
-	for i in range(0, len(OBD_CODES)):
+	work = {}
+	dontwork = {}
+	for i in OBD_CODES:
 		input = "01" + OBD_CODES[i] + "\r"
 		sio.write(str(input))
 		sio.flush()
@@ -126,9 +127,9 @@ def possibleCodesScan():
 		for j in range(0,len(response)):
 			if j == 1:
 				if(response[j] != u'NO DATA\n'):
-					work.append(OBD_CODES[i])
+					work[i] = OBD_CODES[i]
 				else:
-					dontwork.append(OBD_CODES[i])
+					dontwork[i] = OBD_CODES[i]
 
 	print("Scan is complete")
 	return work
@@ -248,8 +249,8 @@ def OSABCDFAERVB5_Decode():
 	D = int(obd_string[i+2],16)
 	OBD_data_1 = float(2/65536)*(256*A+B)
 	OBD_data_2 = float(8/65536)*(256*C+D)
-	OBD_LOG['Oxygen Sensor 1 AB: Fuel-Air Equivalence Ratio'] = OBD_data_1
-	OBD_LOG['Oxygen Sensor 1 CD: Voltage'] = OBD_data_2
+	OBD_LOG['Oxygen Sensor 5 AB: Fuel-Air Equivalence Ratio'] = OBD_data_1
+	OBD_LOG['Oxygen Sensor 5 CD: Voltage'] = OBD_data_2
 
 def OSABCDFAERVB6_Decode():
 	A = int(obd_string[i+1],16)
@@ -258,8 +259,8 @@ def OSABCDFAERVB6_Decode():
 	D = int(obd_string[i+2],16)
 	OBD_data_1 = float(2/65536)*(256*A+B)
 	OBD_data_2 = float(8/65536)*(256*C+D)
-	OBD_LOG['Oxygen Sensor 1 AB: Fuel-Air Equivalence Ratio'] = OBD_data_1
-	OBD_LOG['Oxygen Sensor 1 CD: Voltage'] = OBD_data_2
+	OBD_LOG['Oxygen Sensor 6 AB: Fuel-Air Equivalence Ratio'] = OBD_data_1
+	OBD_LOG['Oxygen Sensor 6 CD: Voltage'] = OBD_data_2
 	
 def OSABCDFAERVB8_Decode():
 	A = int(obd_string[i+1],16)
@@ -469,7 +470,7 @@ def AEPT_Decode():
 OBD_DICT = {'00' : 0,'04' : 1,'05' : 1,'06' : 1,'07' : 1,'08' : 1,'09' : 1,'0C' : 2,'0D' : 1,'0E' : 1,'0F' : 1,'10' : 2,'11' : 1,'15' : 2,'19' : 2,'1A' : 2,'1F' : 2,'21' : 2,'24' : 4,'28' : 4,'29' : 4,'2B' : 4,'2E' : 1,'30' : 1,'31' : 2,'33' : 1,'34' : 4,'35' : 4,'37' : 4,'38' : 4,'39' : 4,'3B' : 4,'3C' : 2,'3D' : 2,'3E' : 2,'3F' : 2,'42' : 2,'43' : 2,'44' : 2,'45' : 1,'47' : 1,'49' : 1,'4A' : 1,'4C' : 1,'4D' : 2,'4E' : 2,'4F' : 4,'50' : 4,'52' : 1,'53' : 2,'62' : 1}
 OBD_LOG = {}
 OBD_FUNC = {'04' : CEL_Decode,'05' : ECT_Decode,'06' : STFTB1_Decode,'07' : LTFTB1_Decode,'08' : STFTB2_Decode,'09' : LTFTB2_Decode,'0C' : RPM_Decode,'0D' : MPH_Decode,'0E' : TA_Decode,'0F' : IAT_Decode,'10' : MAFAFR_Decode,'11' : TP_Decode,'15' : OSVSTFTB2_Decode,'19' : OSVSTFTB6_Decode,'1A' : OSVSTFTB7_Decode,'1F' : RTSES_Decode,'21' : DTWMILO_Decode,'24' : OSABCDFAERVB8_Decode,'28' : OSABCDFAERVB5_Decode,'29' : OSABCDFAERVB6_Decode,'2B' : OSABCDFAERVB8_Decode,'2E' : CEP_Decode,'30' : WUSCC_Decode,'31' : DTSCC_Decode,'33' : ABP_Decode,'34' : OSABCDFAERCB1_Decode,'35' : OSABCDFAERCB2_Decode,'37' : OSABCDFAERCB4_Decode,'38' : OSABCDFAERCB5_Decode,'39' : OSABCDFAERCB6_Decode,'3B' : OSABCDFAERCB8_Decode,'3C' : CTB1S1_Decode,'3D' : CTB2S1_Decode,'3E' : CTB1S2_Decode,'3F' : CTB2S2_Decode,'42' : CMV_Decode,'43' : ALV_Decode,'44' : FACER_Decode,'45' : RTP_Decode,'47' : ATPB_Decode,'49' : APPD_Decode,'4A' : APPE_Decode,'4C' : CTA_Decode,'4D' : TRWMILO_Decode,'4E' : TSTCC_Decode,'4F' : MVFFAEROSVOSCAIMAP_Decode,'50' : MVFAFRFMAFS_Decode,'52' : EF_Decode,'53' : AESVP_Decode,'62' : AEPT_Decode}
-OBD_CODES = ["00","01","02","03","04","05","06","07","08","09","0A","0B","0C","0D","0E","0F","1","10","11","12","13","14","15","16","17","18","19","1A","1B","1C","1D","1E","1F","2","20","21","22","23","24","25","26","27","28","29","2A","2B","2C","2D","2E","2F","3","30","31","32","33","34","35","36","37","38","39","3A","3B","3C","3D","3E","3F","4","40","41","42","43","44","45","46","47","48","49","4A","4B","4C","4D","4E","4F","5","50","51","52","53","54","55","56","57","58","59","5A","5B","5C","5D","5E","5F","6","60","61","62","63","64","65","66","67","68","69","6A","6B","6C","6D","6E","6F","7","70","71","72","73","74","75","76","77","78","79","7A","7B","7C","7D","7E","7F","8","80","81","82","83","84","85","86","87","88","89","8A","8B","8C","8D","8E","8F","9","90","91","92","93","94","98","99","9A","9B","9C","9D","9E","9F","A0","A1","A2","A3","A4","A5","A6","C0","C3","C4"]
+OBD_CODES = {'Evap system vapor pressure': '54', 'NOx reagent system': '85', 'Mass air flow sensor': '66', 'Engine percent torque data': '64', 'NOx Warning And Inducement System': '94', 'Commanded Diesel intake air flow control and relative intake air flow position': '6A', 'PIDs supported [61 - 80]': '60', 'Maximum value for air flow rate from mass air flow sensor': '50', 'Variable Geometry turbo (VGT) control': '71', 'Engine coolant temperature': '67', 'Diesel Particulate filter (DPF) temperature': '7C', 'Calculated engine load': '04', 'Evap. System Vapor Pressure': '32', 'Cylinder Fuel Rate': 'A2', 'Diesel Aftertreatment': '8B', 'Exhaust gas recirculation temperature': '6B', 'Oxygen sensors present (in 2 banks)': '13', 'Fuel System Control': '92', 'Ambient air temperature': '46', 'Fuel-Air commanded equivalence ratio': '44', 'Fuel system status': '03', 'Throttle Position G': '8D', 'Hybrid battery pack remaining life': '5B', 'Exhaust Gas Temperature Sensor': '99', 'Actual engine - percent torque': '62', 'Charge air cooler temperature (CACT)': '77', 'Relative accelerator pedal position': '5A', 'WWH-OBD Vehicle OBD System Information': '91', 'Distance traveled since codes cleared': '31', 'Commanded throttle actuator control and relative throttle position': '6C', 'NOx Sensor Corrected Data': 'A1', 'Drivers demand engine - percent torque': '61', 'Intake manifold absolute pressure': '87', 'Auxiliary input / output supported': '65', 'Engine fuel rate': '5E', 'Absolute Evap system Vapor Pressure': '53', 'OBD standards this vehicle conforms to': '1C', 'Fuel System Percentage Use': '9F', 'Turbocharger temperature': '76', 'Exhaust Gas temperature (EGT) Bank 1': '78', 'Exhaust Gas temperature (EGT) Bank 2': '79', 'Run time since engine start': '1F', 'Odometer': 'A6', 'NOx sensor': '83', 'Fuel injection timing': '5D', 'Run Time for AECD #11-#15': '89', 'Oxygen Sensor 5: Voltage': '18', 'Emission requirements to which vehicle is designed': '5F', 'Fuel pressure control system': '6D', 'Long term fuel trim-Bank 1': '07', 'Long term fuel trim-Bank 2': '09', 'Exhaust pressure': '73', 'Catalyst Temperature: Bank 1, Sensor 2': '3E', 'Catalyst Temperature: Bank 1, Sensor 1': '3C', 'Commanded throttle actuator': '4C', 'WWH-OBD Vehicle OBD Counters support': '93', 'Throttle position': '11', 'Oxygen Sensor 4: Voltage': '17', 'Warm-ups since codes cleared': '30', 'Fuel Rail Pressure': '22', 'Oxygen Sensor 1: Voltage': '14', 'Fuel rail absolute pressure': '59', 'Time since trouble codes cleared': '4E', 'Commanded EGR': '2C', 'Ethanol fuel %': '52', 'Engine reference torque': '63', 'Auxiliary input status': '1E', 'Particulate matter (PM) sensor': '86', 'Oxygen sensors present': '1D', 'Time run with MIL on': '4D', 'Wastegate control': '72', 'Freeze DTC': '02', 'Fuel Type': '51', 'Commanded secondary air status': '12', 'Fuel pressure': '0A', 'Diesel Exhaust Fluid Dosing': 'A5', 'Diesel Exhaust Fluid Sensor Data': '9B', 'Absolute load value': '43', 'Turbocharger RPM': '74', 'PM Sensor Bank 1 & 2': '8F', 'Turbocharger compressor inlet pressure': '6F', 'Oxygen Sensor 6: Voltage': '19', 'Oxygen Sensor 8: Voltage': '1B', 'Diesel particulate filter (DPF)': '7B', 'Engine Friction - Percent Torque': '8E', 'Run Time for AECD #16-#20': '8A', 'Absolute throttle position B': '47', 'Absolute throttle position C': '48', 'Injection pressure control system': '6E', 'Engine run time for Auxiliary Emissions Control Device(AECD)': '82', 'Monitor status this drive cycle': '41', 'Accelerator pedal position F': '4B', 'Accelerator pedal position D': '49', 'Accelerator pedal position E': '4A', 'Control module voltage': '42', 'Commanded EGR and EGR Error': '69', 'Oxygen Sensor 2: Voltage': '15', 'Absolute Barometric Pressure': '33', 'Oxygen Sensor 7: Voltage': '1A', 'SCR Induce System': '88', 'Relative throttle position': '45', 'Engine Fuel Rate': '9D', 'Transmission Actual Gear': 'A4', 'Vehicle speed': '0D', 'Oxygen Sensor 3': '36', 'Maximum value for Fuel-Air equivalence ratio': '4F', 'MAF air flow rate': '10', 'Oxygen Sensor 5': '38', 'Oxygen Sensor 4': '37', 'Oxygen Sensor 7': '3A', 'Oxygen Sensor 6': '39', 'Oxygen Sensor 1': '34', 'Fuel Rail Gauge Pressure': '23', 'Oxygen Sensor 2': '35', 'Boost pressure control': '70', 'Oxygen Sensor 8': '3B', 'Catalyst Temperature: Bank 2, Sensor 1': '3D', 'Catalyst Temperature: Bank 2, Sensor 2': '3F', 'Manifold surface temperature': '84', 'Timing advance': '0E', 'Short term fuel trim-Bank 1': '06', 'Short term fuel trim-Bank 2': '08', 'Engine RPM': '0C', 'O2 Sensor Data': '9C', 'Short term secondary oxygen sensor trim, A: bank 1, B: bank 3': '55', 'Fuel Tank Level Input': '2F', 'Intake air temperature sensor': '68', 'Engine Exhaust Flow Rate': '9E', 'Hybrid/EV Vehicle System Data, Battery, Voltage': '9A', 'Distance traveled with malfunction indicator lamp (MIL) on': '21', 'Commanded evaporative purge': '2E', 'O2 Sensor (Wide Range)': '8C', 'Short term secondary oxygen sensor trim, A: bank 2, B: bank 4': '57', 'Evap System Vapor Pressure': 'A3', 'Engine oil temperature': '5C', 'Long term secondary oxygen sensor trim, A: bank 2, B: bank 4': '58', 'Engine run time': '7F', 'EGR Error': '2D', 'Monitor status since DTCs cleared': '01', 'Oxygen Sensor 3: Voltage': '16', 'Intake air temperature': '0F', 'Long term secondary oxygen sensor trim, A: bank 1, B: bank 3': '56'}
 def decode(rawData):
 	global OBD_DICT, OBD_LOG, OBD_FUNC, obd_string, i
 	
