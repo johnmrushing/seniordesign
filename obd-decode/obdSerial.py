@@ -35,7 +35,7 @@ ser = serial.Serial(
 sio = io.TextIOWrapper(io.BufferedRWPair(ser, ser))
 
 def init():
-    try:
+	try:
 		# STEP 1:
 		# Attempt to send 'ATZ'
 		input = 'ATZ\r'
@@ -97,7 +97,7 @@ def VIN_Decode(res):
 	VIN_hex = VIN_hex.replace('\n','')
 	VIN = bytes.fromhex(VIN_hex).decode('utf-8')
 	print(VIN)
-	if(os.path.exist('profiles/'+VIN+'.txt')):
+	if(os.path.exists('profiles/'+VIN+'.txt')):
 		f = open('profiles/'+VIN+'.txt')
 		contents = f.read()
 		print(contents)
@@ -109,16 +109,16 @@ def VIN_Decode(res):
 		possibleCodes = possibleCodesScan()
 		print(possibleCodes)
 		f = open('profiles/'+VIN+'.txt',"w+")
-		f.write(possibleCodes)
+		f.write(str(possibleCodes))
 		sockets.emit('possibleCodes', possibleCodes)
 		f.close()
 		
 def possibleCodesScan():
 	work = []
 	dontwork = []
-	for i in range(0, len(codes)):
+	for i in range(0, len(OBD_CODES)):
 		input = "01" + OBD_CODES[i] + "\r"
-		sio.write(unicode(input))
+		sio.write(str(input))
 		sio.flush()
 		time.sleep(0.2)
 		response = sio.readlines()
@@ -508,22 +508,22 @@ def decode(rawData):
 		i += (obd_code+1)
 
 def logging(gps, obdTime):
-    global begin, fileName, log, stop, t2
-    sockets.on("start", message_handler)
-    sockets.on("stop", stop_handler)
-    if (begin == True):
-        OBD_LOG['GPS'] = gps
-        OBD_LOG['OBD Time'] = obdTime
-        with open(str(fileName + ".json"), 'a') as outfile:
-            json.dump(OBD_LOG, outfile)
-            if (stop == True):
-                outfile.write(']')
-                os.system("sudo killall ffmpeg")
-                begin = False
+	global begin, fileName, log, stop, t2
+	sockets.on("start", message_handler)
+	sockets.on("stop", stop_handler)
+	if (begin == True):
+		OBD_LOG['GPS'] = gps
+		OBD_LOG['OBD Time'] = obdTime
+		with open(str(fileName + ".json"), 'a') as outfile:
+			json.dump(OBD_LOG, outfile)
+			if (stop == True):
+				outfile.write(']')
+				os.system("sudo killall ffmpeg")
+				begin = False
 				t2.join()
-            else:
-                outfile.write(',')
-    	print("finished logging")
+			else:
+				outfile.write(',')
+		print("finished logging")
 
 def record():
 	os.system("recordvideo")
@@ -565,6 +565,7 @@ def loop():
 	init()
 	sockets.on("selectedCodes", selectedCodes_handler)
 	while(selectedCodes == ""):
+		time.sleep(5)
 		print("waiting for user selection")
 	t1 = threading.Thread(target=read)
 	t1.start()
