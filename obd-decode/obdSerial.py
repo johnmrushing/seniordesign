@@ -82,7 +82,22 @@ def VIN_Decode(res):
 	global VIN, possibleCodes
 	print(res)
 	#decodedVin = ... res to get vin
-	#VIN = decodedVin
+	for i in range(1,len(res)):
+		if '0:' in res[i]:
+			a = res[i]
+			a = a.replace('0: ','')
+		if '1:' in res[i]:
+			b = res[i]
+			b = b.replace('1: ','')
+		if '2:' in res[i]:
+			c = res[i]
+			c = c.replace('2: ','')
+	VIN_hex = a+b+c
+	VIN_hex = VIN_hex[3:]    
+	VIN_hex = VIN_hex.replace(' ','')
+	VIN_hex = VIN_hex.replace('\n','')
+	VIN = bytes.fromhex(VIN_hex).decode('utf-8')
+	print(VIN)
 	if(os.path.exist('profiles/'+VIN+'.txt')):
 		f = open('profiles/'+VIN+'.txt')
 		contents = f.read()
@@ -540,6 +555,7 @@ def read():
 		response = sio.readlines()
 		newOBD = True
 		OBDtime = datetime.datetime.now().isoformat()
+		
 def selectedCodes_handler(msg):
 	global selectedCodes
 	selectedCodes = msg
