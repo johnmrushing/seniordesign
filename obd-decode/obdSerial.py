@@ -98,9 +98,9 @@ def VIN_Decode(res):
 	VIN = bytes.fromhex(VIN_hex).decode('utf-8')
 	print(VIN)
 	contents = ""
-	if(os.path.exists('profiles/'+VIN+'.json')):
-		with open("profiles/"+VIN+ ".json") as outfile:
-			contents = json.loads(outfile)
+	if(os.path.exists('profiles/'+VIN+'.txt')):
+		f = open('profiles/'+VIN+'.txt')
+		contents = f.read()
 		print(contents)
 		possibleCodes = contents
 		sockets.emit('possibleCodes', possibleCodes)
@@ -109,14 +109,14 @@ def VIN_Decode(res):
 	else:
 		possibleCodes = possibleCodesScan()
 		print(possibleCodes)
-		with open("profiles/"+VIN+ ".json", w) as outfile:
-			json.dump(possibleCodes, outfile)
-		sockets.emit('possibleCodes', json.dumps(possibleCodes))
+		f = open('profiles/'+VIN+'.txt',"w+")
+		f.write(str(possibleCodes))
+		sockets.emit('possibleCodes', possibleCodes)
 		f.close()
 		
 def possibleCodesScan():
-	work = {}
-	dontwork = {}
+	work = []
+	dontwork = []
 	for i in OBD_CODES:
 		input = "01" + OBD_CODES[i] + "\r"
 		sio.write(str(input))
@@ -127,9 +127,9 @@ def possibleCodesScan():
 		for j in range(0,len(response)):
 			if j == 1:
 				if(response[j] != u'NO DATA\n'):
-					work[i] = OBD_CODES[i]
+					work.append(i)
 				else:
-					dontwork[i] = OBD_CODES[i]
+					dontwork.append(i)
 
 	print("Scan is complete")
 	return work
@@ -269,8 +269,8 @@ def OSABCDFAERVB8_Decode():
 	D = int(obd_string[i+2],16)
 	OBD_data_1 = float(2/65536)*(256*A+B)
 	OBD_data_2 = float(8/65536)*(256*C+D)
-	OBD_LOG['Oxygen Sensor 1 AB: Fuel-Air Equivalence Ratio'] = OBD_data_1
-	OBD_LOG['Oxygen Sensor 1 CD: Voltage'] = OBD_data_2
+	OBD_LOG['Oxygen Sensor 8 AB: Fuel-Air Equivalence Ratio'] = OBD_data_1
+	OBD_LOG['Oxygen Sensor 8 CD: Voltage'] = OBD_data_2
 	
 def CEP_Decode():
     A = int(obd_string[i+1],16)
