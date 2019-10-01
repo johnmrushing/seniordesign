@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/app.js" line="1" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="77a5665d-3b51-4ba3-b468-fadaebde0bc9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../frontend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../frontend/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/App.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/Components/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/Components/Header.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/src/Components/SettingsButton.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/Components/SettingsButton.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../frontend/src/Components/SettingsModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/Components/SettingsModal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/Components/Telemetry.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/Components/Telemetry.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../frontend/src/Components/TelemetryCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/Components/TelemetryCard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../obd-decode/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../obd-decode/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../obd-decode/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../obd-decode/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../obd-decode/.idea/obd-decode.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../obd-decode/.idea/obd-decode.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../obd-decode/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../obd-decode/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../obd-decode/obdSerial.py" beforeDir="false" afterPath="$PROJECT_DIR$/../obd-decode/obdSerial.py" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -30,8 +27,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="551">
-              <caret line="35" column="5" selection-start-line="35" selection-start-column="5" selection-end-line="35" selection-end-column="5" />
+            <state relative-caret-position="609">
+              <caret line="33" column="13" lean-forward="true" selection-start-line="33" selection-start-column="13" selection-end-line="33" selection-end-column="30" />
             </state>
           </provider>
         </entry>
@@ -196,16 +193,19 @@
       <workItem from="1566151846103" duration="124000" />
       <workItem from="1569457740037" duration="1585000" />
       <workItem from="1569593215247" duration="599000" />
+      <workItem from="1569786100875" duration="2038000" />
+      <workItem from="1569886629532" duration="671000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="99191000" />
+    <option name="totallyTimeSpent" value="101900000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="2576" height="1416" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.09259259" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.06855792" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info id="npm" order="3" side_tool="true" />
@@ -218,7 +218,7 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="9" sideWeight="0.49881798" visible="true" weight="0.29929852" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="9" sideWeight="0.49881798" visible="true" weight="0.2151208" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.501182" side_tool="true" weight="0.23694466" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -256,8 +256,8 @@
     <entry file="file://$PROJECT_DIR$/node_modules/serialport/lib/index.js" />
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="551">
-          <caret line="35" column="5" selection-start-line="35" selection-start-column="5" selection-end-line="35" selection-end-column="5" />
+        <state relative-caret-position="609">
+          <caret line="33" column="13" lean-forward="true" selection-start-line="33" selection-start-column="13" selection-end-line="33" selection-end-column="30" />
         </state>
       </provider>
     </entry>

@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import Card from 'react-bootstrap/Card';
 import {SettingsButton} from "./SettingsButton";
-import {Speedometer} from "./Speedometer";
-import {Tachometer} from "./Tachometer";
+import socketIOClient from "socket.io-client";
+let socket = socketIOClient("http://localhost/");
 
 export class TelemetryCard extends Component {
     constructor(props) {
@@ -17,6 +17,7 @@ export class TelemetryCard extends Component {
     updateSelectedData(obj){
         this.setState({selectedData:obj},() => {
             console.log(this.state.selectedData)
+            socket.emit('userSelectedCodes', {index: this.props.key, data: this.state.selectedData})
         });
 
     }
@@ -29,7 +30,6 @@ export class TelemetryCard extends Component {
                     <Card.Title>{(this.state.selectedData!= null) ? <h6>{this.state.selectedData}</h6> :null}</Card.Title>
                     <Card.Body>
                         {
-
                             (this.state.selectedData!= null && this.state.rawData!= null) ? <p>{this.state.rawData.selectedData}</p>: null
                         }
                     </Card.Body>

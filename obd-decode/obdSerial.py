@@ -20,7 +20,8 @@ response = []
 VIN = ""
 t2= ""
 possibleCodes= []
-selectedCodes = ""
+selectedCodes = ["","","","","",""]
+selectedCodesString = "01"
 
 sockets = socketio.Client()
 sockets.connect('http://localhost')
@@ -546,9 +547,10 @@ def stop_handler(msg):
 	stop = msg
 
 def read():
-	global response, OBDtime, newOBD, selectedCodes
+	global response, OBDtime, newOBD, selectedCodesString
+			
 	while (1):
-		input = selectedCodes+'\r'
+		input = selectedCodesString+'\r'
 		sio.write(str(input))
 		sio.flush()
 		time.sleep(0.1)
@@ -557,16 +559,21 @@ def read():
 		OBDtime = datetime.datetime.now().isoformat()
 		
 def selectedCodes_handler(msg):
-	global selectedCodes
-	selectedCodes = msg
+	global selectedCodes, selectedCodesString
+	selectedCodes[msg[key]] = msg[data]
+	for i in range(len(selectedCodes)):
+		if(selectedCodes[i] != ""):
+			selectedCodesString += " "
+			selectedCodesString += OBD_CODES[selectedCodes[i]]
+			
+	
 	
 def loop():
 	global response, begin, stop, OBDtime, newOBD
 	data = ""
 	init()
 	sockets.on("selectedCodes", selectedCodes_handler)
-	while(selectedCodes == ""):
-		time.sleep(5)
+	while(selectedCodes == ["","","","","",""]):
 		print("waiting for user selection")
 	t1 = threading.Thread(target=read)
 	t1.start()

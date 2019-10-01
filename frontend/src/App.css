@@ -26,3 +26,8 @@
 .App-link {
   color: #61dafb;
 }
+
+.test{
+  height: 200px;
+  overflow-y:scroll;
+}

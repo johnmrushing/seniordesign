@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button'
 import Modal from "react-bootstrap/Modal";
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
+import Badge from 'react-bootstrap/Badge'
 
 
 
@@ -28,7 +29,7 @@ export class SettingsModal extends Component {
         return (
             <div>
 
-                <Modal show={this.props.show} onHide={this.handleClose} size="sm"
+                <Modal show={this.props.show} onHide={this.handleClose} size="lg"
                        aria-labelledby="contained-modal-title-vcenter" centered>
 
                     <Modal.Header closeButton>
@@ -36,19 +37,22 @@ export class SettingsModal extends Component {
                     </Modal.Header>
 
                     <Modal.Body>
+
+                        <h4>Select Data:</h4>
                         {
                             this.props.possibleCodes ?
-                                (
-                                <DropdownButton id="dropdown-item-button" title="Select Data">
+                                (   <div  className={"test"}>
                                     {
-                                        this.props.possibleCodes.map((obj) => {
-                                            return (
-                                                <Dropdown.Item onClick={() =>{this.props.onSelect(obj)} }>{obj}</Dropdown.Item>
-                                            )
-                                        })
-                                    }
-
-                                </DropdownButton>
+                                    this.props.possibleCodes.map((obj) => {
+                                        return (
+                                            <h6>
+                                                <Badge pill variant="primary" onClick={() =>{this.props.onSelect(obj)} }>
+                                                    {<h6>{obj}</h6>}
+                                                </Badge>
+                                            </h6>
+                                        )
+                                    })}
+                                    </div>
                                 )
                                 : (null)
                         }
