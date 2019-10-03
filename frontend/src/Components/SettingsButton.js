@@ -36,9 +36,8 @@ export class SettingsButton extends Component {
 
     render() {
         return (
-            <div>
+            <div className={"settingsDiv"}>
                 <Button variant="light" className = {"settings"} onClick={this.handleClick}>
-                    <Image src={img} roundedCircle/>
                 </Button>
                 {
                     this.state.show ? <SettingsModal show = {this.state.show} onClick = {this.handleClick} onClose = {this.handleClose} possibleCodes = {this.props.possibleCodes} onSelect = {this.handleSelect}/> : null

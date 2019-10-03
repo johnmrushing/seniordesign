@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Orbitron&display=swap');
 .App {
   text-align: center;
 }
@@ -14,9 +15,16 @@
 .float-right{
   margin-right: 23px;
 }
+.settingsDiv{
+  position: relative;
+}
 .settings{
-  display: flex;
-  position:absolute;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 11rem;
+  width: 13rem;
+  opacity: 0;
 }
 .card{
   height: 11rem;
@@ -31,3 +39,8 @@
   height: 200px;
   overflow-y:scroll;
 }
+
+.font{
+  font-family: 'Orbitron', sans-serif;
+}
+

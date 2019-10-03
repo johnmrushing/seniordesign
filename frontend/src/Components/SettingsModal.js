@@ -46,7 +46,7 @@ export class SettingsModal extends Component {
                                     this.props.possibleCodes.map((obj) => {
                                         return (
                                             <h6>
-                                                <Badge pill variant="primary" onClick={() =>{this.props.onSelect(obj)} }>
+                                                <Badge variant="primary" onClick={() =>{this.props.onSelect(obj)} }>
                                                     {<h6>{obj}</h6>}
                                                 </Badge>
                                             </h6>

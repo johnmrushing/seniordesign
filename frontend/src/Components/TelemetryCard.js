@@ -30,7 +30,13 @@ export class TelemetryCard extends Component {
                     <Card.Title>{(this.state.selectedData!= null) ? <h6>{this.state.selectedData}</h6> :null}</Card.Title>
                     <Card.Body>
                         {
-                            (this.state.selectedData!= null && this.state.rawData!= null) ? <p>{this.state.rawData.selectedData}</p>: null
+                            (this.state.selectedData!= null && this.props.rawData!= null) ?
+                                <p className={"font"}>
+                                {
+                                    <h2>{this.props.rawData[this.state.selectedData]}</h2>
+                                }
+                                </p>: 0
+
                         }
                     </Card.Body>
                 </Card>
