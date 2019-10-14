@@ -17,7 +17,8 @@ export class TelemetryCard extends Component {
     updateSelectedData(obj){
         this.setState({selectedData:obj},() => {
             console.log(this.state.selectedData)
-            socket.emit('userSelectedCodes', {index: this.props.key, data: this.state.selectedData})
+			console.log(this.props.listID)
+            socket.emit('userSelectedCodes', {listID: this.props.listID, data: this.state.selectedData})
         });
 
     }
@@ -30,7 +31,7 @@ export class TelemetryCard extends Component {
                     <Card.Title>{(this.state.selectedData!= null) ? <h6>{this.state.selectedData}</h6> :null}</Card.Title>
                     <Card.Body>
                         {
-                            (this.state.selectedData!= null && this.props.rawData!= null) ?
+                            (this.state.selectedData!= null && this.props.rawData!= undefined) ?
                                 <p className={"font"}>
                                 {
                                     <h2>{this.props.rawData[this.state.selectedData]}</h2>
