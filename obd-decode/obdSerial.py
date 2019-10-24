@@ -6,11 +6,13 @@ import threading
 import json
 import datetime
 import os
+from gps.gps import GPS
 
 begin = False
 stop = False
 newOBD = False
 initialBegin = False
+newGPS = False
 obd_string = ""
 i= 0
 OBDtime = ""
@@ -22,11 +24,13 @@ t2= ""
 possibleCodes= []
 selectedCodes = ["","","","","",""]
 selectedCodesString = "01"
+GPSData = ""
+myGPS= GPS()
 
 sockets = socketio.Client()
 sockets.connect('http://localhost')
 ser = serial.Serial(
-    port='/dev/ttyUSB0',
+    port='/dev/serial/by-id/usb-FTDI_FT232R_USB_UART_A90855PO-if00-port0',
     baudrate=10000,
     parity=serial.PARITY_NONE,
     stopbits=serial.STOPBITS_ONE,
@@ -101,8 +105,7 @@ def VIN_Decode(res):
 	contents = ""
 	if(os.path.exists('profiles/'+VIN+'.txt')):
 		f = open('profiles/'+VIN+'.txt')
-		contents = f.read()
-		print(contents)
+		contents = json.loads(f.read())
 		possibleCodes = contents
 		sockets.emit('possibleCodes', possibleCodes)
 		f.close()
@@ -111,7 +114,7 @@ def VIN_Decode(res):
 		possibleCodes = possibleCodesScan()
 		print(possibleCodes)
 		f = open('profiles/'+VIN+'.txt',"w+")
-		f.write(str(possibleCodes))
+		f.write(json.dumps(possibleCodes))
 		sockets.emit('possibleCodes', possibleCodes)
 		f.close()
 		
@@ -471,7 +474,7 @@ def AEPT_Decode():
 OBD_DICT = {'00' : 0,'04' : 1,'05' : 1,'06' : 1,'07' : 1,'08' : 1,'09' : 1,'0C' : 2,'0D' : 1,'0E' : 1,'0F' : 1,'10' : 2,'11' : 1,'15' : 2,'19' : 2,'1A' : 2,'1F' : 2,'21' : 2,'24' : 4,'28' : 4,'29' : 4,'2B' : 4,'2E' : 1,'30' : 1,'31' : 2,'33' : 1,'34' : 4,'35' : 4,'37' : 4,'38' : 4,'39' : 4,'3B' : 4,'3C' : 2,'3D' : 2,'3E' : 2,'3F' : 2,'42' : 2,'43' : 2,'44' : 2,'45' : 1,'47' : 1,'49' : 1,'4A' : 1,'4C' : 1,'4D' : 2,'4E' : 2,'4F' : 4,'50' : 4,'52' : 1,'53' : 2,'62' : 1}
 OBD_LOG = {}
 OBD_FUNC = {'04' : CEL_Decode,'05' : ECT_Decode,'06' : STFTB1_Decode,'07' : LTFTB1_Decode,'08' : STFTB2_Decode,'09' : LTFTB2_Decode,'0C' : RPM_Decode,'0D' : MPH_Decode,'0E' : TA_Decode,'0F' : IAT_Decode,'10' : MAFAFR_Decode,'11' : TP_Decode,'15' : OSVSTFTB2_Decode,'19' : OSVSTFTB6_Decode,'1A' : OSVSTFTB7_Decode,'1F' : RTSES_Decode,'21' : DTWMILO_Decode,'24' : OSABCDFAERVB8_Decode,'28' : OSABCDFAERVB5_Decode,'29' : OSABCDFAERVB6_Decode,'2B' : OSABCDFAERVB8_Decode,'2E' : CEP_Decode,'30' : WUSCC_Decode,'31' : DTSCC_Decode,'33' : ABP_Decode,'34' : OSABCDFAERCB1_Decode,'35' : OSABCDFAERCB2_Decode,'37' : OSABCDFAERCB4_Decode,'38' : OSABCDFAERCB5_Decode,'39' : OSABCDFAERCB6_Decode,'3B' : OSABCDFAERCB8_Decode,'3C' : CTB1S1_Decode,'3D' : CTB2S1_Decode,'3E' : CTB1S2_Decode,'3F' : CTB2S2_Decode,'42' : CMV_Decode,'43' : ALV_Decode,'44' : FACER_Decode,'45' : RTP_Decode,'47' : ATPB_Decode,'49' : APPD_Decode,'4A' : APPE_Decode,'4C' : CTA_Decode,'4D' : TRWMILO_Decode,'4E' : TSTCC_Decode,'4F' : MVFFAEROSVOSCAIMAP_Decode,'50' : MVFAFRFMAFS_Decode,'52' : EF_Decode,'53' : AESVP_Decode,'62' : AEPT_Decode}
-OBD_CODES = {'Vehicle Speed': '0D', 'Engine RPM': '0C','Evap System Vapor Pressure': '54', 'Nox Reagent System': '85', 'Mass Air Flow Sensor': '66', 'Engine Percent Torque Data': '64', 'Nox Warning And Inducement System': '94', 'Commanded Diesel Intake Air Flow Control And Relative Intake Air Flow Position': '6A', 'Pids Supported [61 - 80]': '60', 'Maximum Value For Air Flow Rate From Mass Air Flow Sensor': '50', 'Variable Geometry Turbo (Vgt) Control': '71', 'Engine Coolant Temperature': '67', 'Diesel Particulate Filter (Dpf) Temperature': '7C', 'Calculated Engine Load': '04', 'Evap. System Vapor Pressure': '32', 'Cylinder Fuel Rate': 'A2', 'Diesel Aftertreatment': '8B', 'Exhaust Gas Recirculation Temperature': '6B', 'Oxygen Sensors Present (In 2 Banks)': '13', 'Fuel System Control': '92', 'Ambient Air Temperature': '46', 'Fuel-air Commanded Equivalence Ratio': '44', 'Fuel System Status': '03', 'Throttle Position G': '8D', 'Hybrid Battery Pack Remaining Life': '5B', 'Exhaust Gas Temperature Sensor': '99', 'Actual Engine - Percent Torque': '62', 'Charge Air Cooler Temperature (Cact)': '77', 'Relative Accelerator Pedal Position': '5A', 'Wwh-obd Vehicle Obd System Information': '91', 'Distance Traveled Since Codes Cleared': '31', 'Commanded Throttle Actuator Control And Relative Throttle Position': '6C', 'Nox Sensor Corrected Data': 'A1', 'Drivers Demand Engine - Percent Torque': '61', 'Intake Manifold Absolute Pressure': '87', 'Auxiliary Input / Output Supported': '65', 'Engine Fuel Rate': '5E', 'Absolute Evap System Vapor Pressure': '53', 'Obd Standards This Vehicle Conforms To': '1C', 'Fuel System Percentage Use': '9F', 'Turbocharger Temperature': '76', 'Exhaust Gas Temperature (Egt) Bank 1': '78', 'Exhaust Gas Temperature (Egt) Bank 2': '79', 'Run Time Since Engine Start': '1F', 'Odometer': 'A6', 'Nox Sensor': '83', 'Fuel Injection Timing': '5D', 'Run Time For Aecd #11-#15': '89', 'Oxygen Sensor 5: Voltage': '18', 'Emission Requirements To Which Vehicle Is Designed': '5F', 'Fuel Pressure Control System': '6D', 'Long Term Fuel Trim-bank 1': '07', 'Long Term Fuel Trim-bank 2': '09', 'Exhaust Pressure': '73', 'Catalyst Temperature: Bank 1, Sensor 2': '3E', 'Catalyst Temperature: Bank 1, Sensor 1': '3C', 'Commanded Throttle Actuator': '4C', 'Wwh-obd Vehicle Obd Counters Support': '93', 'Throttle Position': '11', 'Oxygen Sensor 4: Voltage': '17', 'Warm-ups Since Codes Cleared': '30', 'Fuel Rail Pressure': '22', 'Oxygen Sensor 1: Voltage': '14', 'Fuel Rail Absolute Pressure': '59', 'Time Since Trouble Codes Cleared': '4E', 'Commanded Egr': '2C', 'Ethanol Fuel %': '52', 'Engine Reference Torque': '63', 'Auxiliary Input Status': '1E', 'Particulate Matter (Pm) Sensor': '86', 'Oxygen Sensors Present': '1D', 'Time Run With MIL On': '4D', 'Wastegate Control': '72', 'Freeze Dtc': '02', 'Fuel Type': '51', 'Commanded Secondary Air Status': '12', 'Fuel Pressure': '0A', 'Diesel Exhaust Fluid Dosing': 'A5', 'Diesel Exhaust Fluid Sensor Data': '9B', 'Absolute Load Value': '43', 'Turbocharger Rpm': '74', 'Pm Sensor Bank 1 & 2': '8F', 'Turbocharger Compressor Inlet Pressure': '6F', 'Oxygen Sensor 6: Voltage': '19', 'Oxygen Sensor 8: Voltage': '1B', 'Diesel Particulate Filter (Dpf)': '7B', 'Engine Friction - Percent Torque': '8E', 'Run Time For Aecd #16-#20': '8A', 'Absolute Throttle Position B': '47', 'Absolute Throttle Position C': '48', 'Injection Pressure Control System': '6E', 'Engine Run Time For Auxiliary Emissions Control Device(Aecd)': '82', 'Monitor Status This Drive Cycle': '41', 'Accelerator Pedal Position F': '4B', 'Accelerator Pedal Position D': '49', 'Accelerator Pedal Position E': '4A', 'Control Module Voltage': '42', 'Commanded Egr And Egr Error': '69', 'Oxygen Sensor 2: Voltage': '15', 'Absolute Barometric Pressure': '33', 'Oxygen Sensor 7: Voltage': '1A', 'Scr Induce System': '88', 'Relative Throttle Position': '45', 'Engine Fuel Rate': '9D', 'Transmission Actual Gear': 'A4', 'Oxygen Sensor 3': '36', 'Maximum Value For Fuel-air Equivalence Ratio': '4F', 'MAF Air Flow Rate': '10', 'Oxygen Sensor 5': '38', 'Oxygen Sensor 4': '37', 'Oxygen Sensor 7': '3A', 'Oxygen Sensor 6': '39', 'Oxygen Sensor 1': '34', 'Fuel Rail Gauge Pressure': '23', 'Oxygen Sensor 2': '35', 'Boost Pressure Control': '70', 'Oxygen Sensor 8': '3B', 'Catalyst Temperature: Bank 2, Sensor 1': '3D', 'Catalyst Temperature: Bank 2, Sensor 2': '3F', 'Manifold Surface Temperature': '84', 'Timing Advance': '0E', 'Short Term Fuel Trim-bank 1': '06', 'Short Term Fuel Trim-bank 2': '08', 'O2 Sensor Data': '9C', 'Short Term Secondary Oxygen Sensor Trim, A: Bank 1, B: Bank 3': '55', 'Fuel Tank Level Input': '2F', 'Intake Air Temperature Sensor': '68', 'Engine Exhaust Flow Rate': '9E', 'Hybrid/Ev Vehicle System Data, Battery, Voltage': '9A', 'Distance Traveled With Malfunction Indicator Lamp (MIL) On': '21', 'Commanded Evaporative Purge': '2E', 'O2 Sensor (Wide Range)': '8C', 'Short Term Secondary Oxygen Sensor Trim, A: Bank 2, B: Bank 4': '57', 'Evap System Vapor Pressure': 'A3', 'Engine Oil Temperature': '5C', 'Long Term Secondary Oxygen Sensor Trim, A: Bank 2, B: Bank 4': '58', 'Engine Run Time': '7F', 'Egr Error': '2D', 'Monitor Status Since Dtcs Cleared': '01', 'Oxygen Sensor 3: Voltage': '16', 'Intake Air Temperature': '0F', 'Long Term Secondary Oxygen Sensor Trim, A: Bank 1, B: Bank 3': '56'}
+OBD_CODES = {'Vehicle Speed': '0D', 'Engine RPM': '0C','Evap System Vapor Pressure': '54', 'NOX Reagent System': '85', 'Mass Air Flow Sensor': '66', 'Engine Percent Torque Data': '64', 'NOX Warning And Inducement System': '94', 'Commanded Diesel Intake Air Flow Control And Relative Intake Air Flow Position': '6A', 'Pids Supported [61 - 80]': '60', 'Maximum Value For Air Flow Rate From Mass Air Flow Sensor': '50', 'Variable Geometry Turbo (Vgt) Control': '71', 'Engine Coolant Temperature': '67', 'Diesel Particulate Filter (Dpf) Temperature': '7C', 'Calculated Engine Load': '04', 'Evap. System Vapor Pressure': '32', 'Cylinder Fuel Rate': 'A2', 'Diesel Aftertreatment': '8B', 'Exhaust Gas Recirculation Temperature': '6B', 'Oxygen Sensors Present (In 2 Banks)': '13', 'Fuel System Control': '92', 'Ambient Air Temperature': '46', 'Fuel-air Commanded Equivalence Ratio': '44', 'Fuel System Status': '03', 'Throttle Position G': '8D', 'Hybrid Battery Pack Remaining Life': '5B', 'Exhaust Gas Temperature Sensor': '99', 'Actual Engine - Percent Torque': '62', 'Charge Air Cooler Temperature (Cact)': '77', 'Relative Accelerator Pedal Position': '5A', 'Wwh-obd Vehicle Obd System Information': '91', 'Distance Traveled Since Codes Cleared': '31', 'Commanded Throttle Actuator Control And Relative Throttle Position': '6C', 'NOX Sensor Corrected Data': 'A1', 'Drivers Demand Engine - Percent Torque': '61', 'Intake Manifold Absolute Pressure': '87', 'Auxiliary Input / Output Supported': '65', 'Engine Fuel Rate': '5E', 'Absolute Evap System Vapor Pressure': '53', 'Obd Standards This Vehicle Conforms To': '1C', 'Fuel System Percentage Use': '9F', 'Turbocharger Temperature': '76', 'Exhaust Gas Temperature (Egt) Bank 1': '78', 'Exhaust Gas Temperature (Egt) Bank 2': '79', 'Run Time Since Engine Start': '1F', 'Odometer': 'A6', 'NOX Sensor': '83', 'Fuel Injection Timing': '5D', 'Run Time For Aecd #11-#15': '89', 'Oxygen Sensor 5: Voltage': '18', 'Emission Requirements To Which Vehicle Is Designed': '5F', 'Fuel Pressure Control System': '6D', 'Long Term Fuel Trim-bank 1': '07', 'Long Term Fuel Trim-bank 2': '09', 'Exhaust Pressure': '73', 'Catalyst Temperature: Bank 1, Sensor 2': '3E', 'Catalyst Temperature: Bank 1, Sensor 1': '3C', 'Commanded Throttle Actuator': '4C', 'Wwh-obd Vehicle Obd Counters Support': '93', 'Throttle Position': '11', 'Oxygen Sensor 4: Voltage': '17', 'Warm-ups Since Codes Cleared': '30', 'Fuel Rail Pressure': '22', 'Oxygen Sensor 1: Voltage': '14', 'Fuel Rail Absolute Pressure': '59', 'Time Since Trouble Codes Cleared': '4E', 'Commanded Egr': '2C', 'Ethanol Fuel %': '52', 'Engine Reference Torque': '63', 'Auxiliary Input Status': '1E', 'Particulate Matter (Pm) Sensor': '86', 'Oxygen Sensors Present': '1D', 'Time Run With MIL On': '4D', 'Wastegate Control': '72', 'Freeze Dtc': '02', 'Fuel Type': '51', 'Commanded Secondary Air Status': '12', 'Fuel Pressure': '0A', 'Diesel Exhaust Fluid Dosing': 'A5', 'Diesel Exhaust Fluid Sensor Data': '9B', 'Absolute Load Value': '43', 'Turbocharger Rpm': '74', 'Pm Sensor Bank 1 & 2': '8F', 'Turbocharger Compressor Inlet Pressure': '6F', 'Oxygen Sensor 6: Voltage': '19', 'Oxygen Sensor 8: Voltage': '1B', 'Diesel Particulate Filter (Dpf)': '7B', 'Engine Friction - Percent Torque': '8E', 'Run Time For Aecd #16-#20': '8A', 'Absolute Throttle Position B': '47', 'Absolute Throttle Position C': '48', 'Injection Pressure Control System': '6E', 'Engine Run Time For Auxiliary Emissions Control Device(Aecd)': '82', 'Monitor Status This Drive Cycle': '41', 'Accelerator Pedal Position F': '4B', 'Accelerator Pedal Position D': '49', 'Accelerator Pedal Position E': '4A', 'Control Module Voltage': '42', 'Commanded Egr And Egr Error': '69', 'Oxygen Sensor 2: Voltage': '15', 'Absolute Barometric Pressure': '33', 'Oxygen Sensor 7: Voltage': '1A', 'Scr Induce System': '88', 'Relative Throttle Position': '45', 'Engine Fuel Rate': '9D', 'Transmission Actual Gear': 'A4', 'Oxygen Sensor 3': '36', 'Maximum Value For Fuel-air Equivalence Ratio': '4F', 'MAF Air Flow Rate': '10', 'Oxygen Sensor 5': '38', 'Oxygen Sensor 4': '37', 'Oxygen Sensor 7': '3A', 'Oxygen Sensor 6': '39', 'Oxygen Sensor 1': '34', 'Fuel Rail Gauge Pressure': '23', 'Oxygen Sensor 2': '35', 'Boost Pressure Control': '70', 'Oxygen Sensor 8': '3B', 'Catalyst Temperature: Bank 2, Sensor 1': '3D', 'Catalyst Temperature: Bank 2, Sensor 2': '3F', 'Manifold Surface Temperature': '84', 'Timing Advance': '0E', 'Short Term Fuel Trim-bank 1': '06', 'Short Term Fuel Trim-bank 2': '08', 'O2 Sensor Data': '9C', 'Short Term Secondary Oxygen Sensor Trim, A: Bank 1, B: Bank 3': '55', 'Fuel Tank Level Input': '2F', 'Intake Air Temperature Sensor': '68', 'Engine Exhaust Flow Rate': '9E', 'Hybrid/Ev Vehicle System Data, Battery, Voltage': '9A', 'Distance Traveled With Malfunction Indicator Lamp (MIL) On': '21', 'Commanded Evaporative Purge': '2E', 'O2 Sensor (Wide Range)': '8C', 'Short Term Secondary Oxygen Sensor Trim, A: Bank 2, B: Bank 4': '57', 'Evap System Vapor Pressure': 'A3', 'Engine Oil Temperature': '5C', 'Long Term Secondary Oxygen Sensor Trim, A: Bank 2, B: Bank 4': '58', 'Engine Run Time': '7F', 'Egr Error': '2D', 'Monitor Status Since Dtcs Cleared': '01', 'Oxygen Sensor 3: Voltage': '16', 'Intake Air Temperature': '0F', 'Long Term Secondary Oxygen Sensor Trim, A: Bank 1, B: Bank 3': '56'}
 def decode(rawData):
 	global OBD_DICT, OBD_LOG, OBD_FUNC, obd_string, i
 	
@@ -517,12 +520,12 @@ def decode(rawData):
 
 def logging(gps, obdTime):
 	global begin, fileName, log, stop, t2
-	sockets.on("start", message_handler)
+	sockets.on("start", start_handler)
 	sockets.on("stop", stop_handler)
 	if (begin == True):
 		OBD_LOG['GPS'] = gps
 		OBD_LOG['OBD Time'] = obdTime
-		with open(str(fileName + ".json"), 'a') as outfile:
+		with open(str("logs/" + fileName + ".json"), 'a') as outfile:
 			json.dump(OBD_LOG, outfile)
 			if (stop == True):
 				outfile.write(']')
@@ -536,7 +539,7 @@ def logging(gps, obdTime):
 def record():
 	os.system("recordvideo")
 	
-def message_handler(msg):
+def start_handler(msg):
 	global begin, fileName, stop, t2
 	print('test: ', msg)
 	begin = msg
@@ -544,7 +547,7 @@ def message_handler(msg):
 	t2 = threading.Thread(target=record)
 	t2.start()
 	fileName = str(datetime.datetime.now().strftime("%Y-%m-%d %H.%M.%S"))
-	with open(str(fileName + ".json"), 'a') as outfile:
+	with open(str("logs/" + fileName + ".json"), 'a') as outfile:
 		outfile.write('[')
 
 def stop_handler(msg):
@@ -574,30 +577,64 @@ def selectedCodes_handler(msg):
 			selectedCodesString += " "
 			selectedCodesString += OBD_CODES[selectedCodes[i]]
 			
+def readGPS():
+	global GPSData, newGPS, myGPS
+	while(1):
+		myGPS.read()
+
+		#print myGPS.NMEA1
+		#print myGPS.NMEA2
+
+		if myGPS.fix != 0:
+			data = {
+				"UTC": myGPS.timeUTC,
+				"satsTracked": myGPS.sats,
+				"latitude":
+				[{
+					"degrees": myGPS.latDeg,
+					"minutes": myGPS.latMin,
+					"hemisphere": myGPS.latHem
+				}],
+				 "longitude":
+				[{
+					"degrees": myGPS.lonDeg,
+					"minutes": myGPS.lonMin,
+					"hemisphere": myGPS.lonHem
+				}],
+				"knots": myGPS.knots,
+				"altitude": myGPS.altitude,
+			}
+			GPSData = data
+			newGPS = True
 	
 	
 def loop():
-	global response, begin, stop, OBDtime, newOBD
+	global response, begin, stop, OBDtime, newOBD, GPSData, newGPS, myGPS
 	data = ""
+	gps = ""
 	init()
+	t1 = threading.Thread(target=readGPS)
+	t1.start()
 	sockets.on("selectedCodes", selectedCodes_handler)
 	while(selectedCodes == ["","","","","",""]):
 		print("waiting for user selection")
 		time.sleep(6)
-	t1 = threading.Thread(target=read)
-	t1.start()
+	t3 = threading.Thread(target=read)
+	t3.start()
 	while (1):
-		gps = datetime.datetime.now().isoformat() #go get GPS data
-		time.sleep(0.1)
+		if(newGPS == True):
+			print (GPSData)
+			gps = GPSData
+			newGPS = False
 		if (newOBD == True):
 			print(response)
-			print(datetime.datetime.now().isoformat())
 			decode(response)
 			data = json.dumps(OBD_LOG)
 			print(data)
 			sockets.emit('obd-in', data)
 			newOBD = False
 		logging(gps, OBDtime)
+		time.sleep(0.1)
 
 if __name__ == '__main__':
 	try:
