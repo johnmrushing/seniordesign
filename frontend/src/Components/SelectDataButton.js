@@ -1,12 +1,9 @@
 import React, {Component} from 'react';
-import Image from 'react-bootstrap/Image';
-import img from './settings.png';
 import Button from 'react-bootstrap/Button';
-import {Tachometer} from "./Tachometer";
-import {SettingsModal} from "./SettingsModal";
+import {SelectDataModal} from "./SelectDataModal";
 
 
-export class SettingsButton extends Component {
+export class SelectDataButton extends Component {
     constructor(props) {
         super(props);
         this.handleClick = this.handleClick.bind(this);
@@ -40,7 +37,7 @@ export class SettingsButton extends Component {
                 <Button variant="light" className = {"settings"} onClick={this.handleClick}>
                 </Button>
                 {
-                    this.state.show ? <SettingsModal show = {this.state.show} onClick = {this.handleClick} onClose = {this.handleClose} possibleCodes = {this.props.possibleCodes} onSelect = {this.handleSelect}/> : null
+                    this.state.show ? <SelectDataModal show = {this.state.show} onClick = {this.handleClick} onClose = {this.handleClose} possibleCodes = {this.props.possibleCodes} onSelect = {this.handleSelect} selectedData = {this.props.selectedRawData}/> : null
                 }
             </div>
         )

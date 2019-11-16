@@ -10,7 +10,7 @@
 .float-left{
   position:absolute;
   float: left;
-  margin-left:65px;
+  margin-left:48px;
 }
 .float-right{
   margin-right: 23px;
@@ -29,6 +29,13 @@
 .card{
   height: 11rem;
   width: 13rem;
+}
+.cardBody{
+
+}
+.cardFooter{
+  padding: unset;
+  height: 25px;
 }
 
 .App-link {

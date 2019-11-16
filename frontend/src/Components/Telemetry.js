@@ -19,25 +19,25 @@ export class Telemetry extends Component {
                 <Container>
                     <Row className="justify-content-md-center">
                         <Col>
-                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} key = {0}/>
+                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} listID = {0} key = {0}/>
                         </Col>
                         <Col>
-                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} key = {1}/>
+                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} listID = {1} key = {1}/>
                         </Col>
                         <Col>
-                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} key = {2}/>
+                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} listID = {2} key = {2}/>
                         </Col>
                     </Row>
                     <br/>
                     <Row className="justify-content-md-center">
                         <Col>
-                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} key = {3}/>
+                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} listID = {3} key = {3}/>
                         </Col>
                         <Col>
-                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} key = {4}/>
+                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} listID = {4} key = {4}/>
                         </Col>
                         <Col>
-                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} key = {5}/>
+                            <TelemetryCard possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} listID = {5} key = {5}/>
                         </Col>
                     </Row>
                 </Container>

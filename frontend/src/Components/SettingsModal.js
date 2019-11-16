@@ -1,11 +1,7 @@
 import React, {Component} from 'react';
 import Button from 'react-bootstrap/Button'
 import Modal from "react-bootstrap/Modal";
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import Dropdown from 'react-bootstrap/Dropdown';
-import Badge from 'react-bootstrap/Badge'
-
-
+import Form from 'react-bootstrap/Form'
 
 export class SettingsModal extends Component {
     constructor(props) {
@@ -13,8 +9,7 @@ export class SettingsModal extends Component {
         this.handleClick = this.handleClick.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.state = {
-            display: "digital",
-            data: this.props.data
+            toggle: true
         };
     }
 
@@ -22,7 +17,7 @@ export class SettingsModal extends Component {
         this.props.onClick()
     }
     handleClose() {
-       this.props.onClose()
+        this.props.onClose()
     }
 
     render() {
@@ -33,29 +28,26 @@ export class SettingsModal extends Component {
                        aria-labelledby="contained-modal-title-vcenter" centered>
 
                     <Modal.Header closeButton>
-                        <Modal.Title id="contained-modal-title-vcenter">Available Data</Modal.Title>
+                        <Modal.Title id="contained-modal-title-vcenter">Settings</Modal.Title>
                     </Modal.Header>
 
                     <Modal.Body>
+                        <p>add profile</p>
+                        <Form>
+                            <Form.Check
+                                custom
+                                onChange={(e) =>this.setState(prevState => ({
+                                    toggle: !prevState.toggle
+                                }))}
+                                type="switch"
+                                id="custom-switch"
+                                label="Record Video"
+                            />
+                        </Form>
+                        <p>turn recording off</p>
+                        <p>autocross layout</p>
+                        <p>darkmode</p>
 
-                        <h4>Select Data:</h4>
-                        {
-                            this.props.possibleCodes ?
-                                (   <div  className={"test"}>
-                                    {
-                                    this.props.possibleCodes.map((obj) => {
-                                        return (
-                                            <h6>
-                                                <Badge variant="primary" onClick={() =>{this.props.onSelect(obj)} }>
-                                                    {<h6>{obj}</h6>}
-                                                </Badge>
-                                            </h6>
-                                        )
-                                    })}
-                                    </div>
-                                )
-                                : (null)
-                        }
                     </Modal.Body>
 
                     <Modal.Footer>
