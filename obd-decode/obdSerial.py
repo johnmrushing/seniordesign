@@ -7,6 +7,7 @@ import json
 import datetime
 import os
 import picamera
+import subprocess
 from gps.gps import GPS
 
 camera = picamera.PiCamera()
@@ -684,6 +685,66 @@ OBD_CODES ={
   'Calculated Engine Load': '04',
   'Evap. System Vapor Pressure': '32',
   'Ambient Air Temperature': '46',
+  'Oxygen Sensor 1: Voltage': '14',
+  'Oxygen Sensor 1: Short Term Fuel Trim': '14',
+  'Oxygen Sensor 2: Voltage': '15',
+  'Oxygen Sensor 2: Short Term Fuel Trim': '15',
+  'Oxygen Sensor 3: Voltage': '16',
+  'Oxygen Sensor 3: Short Term Fuel Trim': '16',
+  'Oxygen Sensor 4: Voltage': '17',
+  'Oxygen Sensor 4: Short Term Fuel Trim': '17',
+  'Oxygen Sensor 5: Voltage': '18',
+  'Oxygen Sensor 5: Short Term Fuel Trim': '18',
+  'Oxygen Sensor 6: Voltage': '19',
+  'Oxygen Sensor 6: Short Term Fuel Trim': '19',
+  'Oxygen Sensor 7: Voltage': '1A',
+  'Oxygen Sensor 7: Short Term Fuel Trim': '1A',
+  'Oxygen Sensor 8: Voltage': '1B',
+  'Oxygen Sensor 8: Short Term Fuel Trim': '1B',
+  'Oxygen Sensor 1 AB: Fuel-Air Equivalence Ratio': '24',
+  'Oxygen Sensor 1 CD: Voltage': '24',
+  'Oxygen Sensor 2 AB: Fuel-Air Equivalence Ratio': '25',
+  'Oxygen Sensor 2 CD: Voltage': '25',
+  'Oxygen Sensor 3 AB: Fuel-Air Equivalence Ratio': '26',
+  'Oxygen Sensor 3 CD: Voltage': '26',
+  'Oxygen Sensor 4 AB: Fuel-Air Equivalence Ratio': '27',
+  'Oxygen Sensor 4 CD: Voltage': '27',
+  'Oxygen Sensor 5 AB: Fuel-Air Equivalence Ratio': '28',
+  'Oxygen Sensor 5 CD: Voltage': '28',
+  'Oxygen Sensor 6 AB: Fuel-Air Equivalence Ratio': '29',
+  'Oxygen Sensor 6 CD: Voltage': '29',
+  'Oxygen Sensor 7 AB: Fuel-Air Equivalence Ratio': '2A',
+  'Oxygen Sensor 7 CD: Voltage': '2A',
+  'Oxygen Sensor 8 AB: Fuel-Air Equivalence Ratio': '2B',
+  'Oxygen Sensor 8 CD: Voltage': '2B',
+  'Oxygen Sensor 1 AB: Fuel-Air Equivalence Ratio 2': '34',
+  'Oxygen Sensor 1 CD: Current': '34',
+  'Oxygen Sensor 2 AB: Fuel-Air Equivalence Ratio 2': '35',
+  'Oxygen Sensor 2 CD: Current': '35',
+  'Oxygen Sensor 3 AB: Fuel-Air Equivalence Ratio 2': '36',
+  'Oxygen Sensor 3 CD: Current': '36',
+  'Oxygen Sensor 4 AB: Fuel-Air Equivalence Ratio 2': '37',
+  'Oxygen Sensor 4 CD: Current': '37',
+  'Oxygen Sensor 5 AB: Fuel-Air Equivalence Ratio 2': '38',
+  'Oxygen Sensor 5 CD: Current': '38',
+  'Oxygen Sensor 6 AB: Fuel-Air Equivalence Ratio 2': '39',
+  'Oxygen Sensor 6 CD: Current': '39',
+  'Oxygen Sensor 7 AB: Fuel-Air Equivalence Ratio 2': '3A',
+  'Oxygen Sensor 7 CD: Current': '3A',
+  'Oxygen Sensor 8 AB: Fuel-Air Equivalence Ratio 2': '3B',
+  'Oxygen Sensor 8 CD: Current': '3B',
+  'Maximum Value For Fuel-Air Equivalence Ratio': '4F',
+  'Maximum Value For Oxygen Sensor Voltage': '4F',
+  'Maximum Value For Oxygen Sensor Current': '4F',
+  'Maximum Value For Intake Manifold Absolute Pressure': '4F',
+  'Short Term Secondary Oxygen Sensor Trim, A: Bank 1': '55',
+  'Short Term Secondary Oxygen Sensor Trim, B: Bank 3': '55',
+  'Long Term Secondary Oxygen Sensor Trim, A: Bank 1': '56',
+  'Long Term Secondary Oxygen Sensor Trim, B: bank 3': '56',
+  'Short Term Secondary Oxygen Sensor Trim, A: bank 2': '57',
+  'Short Term Secondary Oxygen Sensor Trim, B: bank 4': '57',
+  'Long Term Secondary Oxygen Sensor Trim, A: bank 2': '58',
+  'Long Term Secondary Oxygen Sensor Trim, B: bank 4': '58',
   'Fuel-Air Commanded Equivalence Ratio': '44',
   'Hybrid Battery Pack Remaining Life': '5B',
   'Actual Engine-Percent Torque': '62',
@@ -694,16 +755,13 @@ OBD_CODES ={
   'Absolute Evap System Vapor Pressure': '53',
   'Run Time Since Engine Start': '1F',
   'Fuel Injection Timing': '5D',
-  'Oxygen Sensor 5: Voltage': '18',
   'Long Term Fuel Trim-Bank 1': '07',
   'Long Term Fuel Trim-Bank 2': '09',
   'Catalyst Temperature: Bank 1, Sensor 2': '3E',
   'Catalyst Temperature: Bank 1, Sensor 1': '3C',
   'Commanded Throttle Actuator': '4C',
-  'Oxygen Sensor 4: Voltage': '17',
   'Warm-ups Since Codes Cleared': '30',
   'Fuel Rail Pressure': '22',
-  'Oxygen Sensor 1: Voltage': '14',
   'Fuel Rail Absolute Pressure': '59',
   'Time Since Trouble Codes Cleared': '4E',
   'Commanded EGR': '2C',
@@ -712,84 +770,89 @@ OBD_CODES ={
   'Time Run With MIL On': '4D',
   'Fuel Pressure': '0A',
   'Absolute Load Value': '43',
-  'Oxygen Sensor 6: Voltage': '19',
-  'Oxygen Sensor 8: Voltage': '1B',
   'Absolute Throttle Position B': '47',
   'Absolute Throttle Position C': '48',
   'Monitor Status This Drive Cycle': '41',
   'Control Module Voltage': '42',
-  'Oxygen Sensor 2: Voltage': '15',
   'Absolute Barometric Pressure': '33',
-  'Oxygen Sensor 7: Voltage': '1A',
   'Relative Throttle Position': '45',
-  'Oxygen Sensor 3': '36',
-  'Maximum Value For Fuel-Air Equivalence Ratio': '4F',
   'MAF Air Flow Rate': '10',
-  'Oxygen Sensor 5': '38',
-  'Oxygen Sensor 4': '37',
-  'Oxygen Sensor 7': '3A',
-  'Oxygen Sensor 6': '39',
-  'Oxygen Sensor 1': '34',
   'Fuel Rail Gauge Pressure': '23',
-  'Oxygen Sensor 2': '35',
-  'Oxygen Sensor 8': '3B',
   'Catalyst Temperature: Bank 2, Sensor 1': '3D',
   'Catalyst Temperature: Bank 2, Sensor 2': '3F',
   'Timing Advance': '0E',
   'Short Term Fuel Trim-Bank 1': '06',
   'Short Term Fuel Trim-Bank 2': '08',
-  'Short Term Secondary Oxygen Sensor Trim, A: Bank 1': '55',
+  'Fuel Tank Level Input': '2F',
   'Distance Traveled With Malfunction Indicator Lamp (MIL) On': '21',
   'Commanded Evaporative Purge': '2E',
-  'Short Term Secondary Oxygen Sensor Trim, A: Bank 2': '57',
-  'Evap System Vapor Pressure': 'A3',
   'Engine Oil Temperature': '5C',
-  'Long Term Secondary Oxygen Sensor Trim, A: Bank 2': '58',
   'EGR Error': '2D',
-  'Oxygen Sensor 3: Voltage': '16',
-  'Long Term Secondary Oxygen Sensor Trim, A: Bank 1': '56'
-} 
-def decode(rawData):
-	global OBD_DICT, OBD_LOG, OBD_FUNC, obd_string, i	
-	a=''
-	b=''
-	c=''
-	for i in range(1,len(rawData)):
-		if '0:' in rawData[i]:
-			a = rawData[i]
-			if (len(a) < 20):
-				a = a + rawData[i+1]
-			a = a.replace('0: ','')
-		if '1:' in rawData[i]:
-			b = rawData[i]
-			if (len(b) < 20):
-				b = b + rawData[i+1]
-			b = b.replace('1: ','')
-		if '2:' in rawData[i]:
-			c = rawData[i]
-			if (len(c) < 20):
-				c = c + rawData[i+1]
-			c = c.replace('2: ','')
-		if (len(a) > 2 and len(b) > 2 and len(c) > 2):
-			break
-	new_string = a+b+c
-	new_string = new_string.replace('\n','')
-	obd_string = new_string.split(' ')
-	if (obd_string[-1] == "" or " "):
-		obd_string.pop()
+}
 
-	i = 1
-	obd_cnt = 0
-	while i < len(obd_string):
-		obd_code = OBD_DICT[obd_string[i]]
-		if (obd_code != 0):
-			obd_data = OBD_FUNC[obd_string[i]]()
-			obd_cnt +=1
-			#print(obd_data)
-		if (obd_cnt == 3):
-			print("test3")
-			break
-		i += (obd_code+1)
+def decode(rawData):
+    global OBD_DICT, OBD_LOG, OBD_FUNC, obd_string, i
+    
+    OBD_LEN = 1
+    command = rawData[0]
+    command_breakdown = command.split()
+    for i in range(1,len(command_breakdown)):
+        obd_command_len = OBD_DICT[command_breakdown[i]]
+        OBD_LEN = OBD_LEN + obd_command_len + 1
+    
+    option_1 = 0
+    for i in range(1,len(rawData)):
+        if ':' in rawData[i]:
+            option_1 = 1
+        
+    a=''
+    b=''
+    c=''
+    if (option_1 == 1):
+        for i in range(1,len(rawData)):
+            if '0:' in rawData[i]:
+                a = rawData[i]
+                if (len(a) < 20):
+                    a = a + rawData[i+1]
+                a = a.replace('0: ','')
+            if '1:' in rawData[i]:
+                b = rawData[i]
+                if (len(b) < 20):
+                    b = b + rawData[i+1]
+                b = b.replace('1: ','')
+            if '2:' in rawData[i]:
+                c = rawData[i]
+                if (len(c) < 20):
+                    c = c + rawData[i+1]
+                c = c.replace('2: ','')
+            if (len(a) > 2 and len(b) > 2 and len(c) > 2):
+                break
+    else:
+        for i in range(1,len(rawData)):
+            if '41' in rawData[i]:
+                a = rawData[i]
+
+    new_string = a+b+c
+    new_string = new_string.replace('\n','')
+    obd_string = new_string.split(' ')
+    if (obd_string[-1] == "" or " "):
+        obd_string.pop()
+    obd_string = obd_string[:OBD_LEN]
+    
+    i = 1
+    obd_cnt = 0
+    while i < len(obd_string):
+        obd_code_check = OBD_DICT.get(obd_string[i],0)
+        if (obd_code_check == 0):
+            break
+        obd_code = OBD_DICT[obd_string[i]]
+        if (obd_code != 0):
+            obd_data = OBD_FUNC[obd_string[i]]()
+            obd_cnt +=1
+            #print(obd_data)
+        if (obd_cnt == 6):
+            break
+        i += (obd_code+1)
 
 def logging(gps, obdTime):
 	global begin, fileName, log, stop, t2, camera
@@ -803,6 +866,7 @@ def logging(gps, obdTime):
 			if (stop == True):
 				outfile.write(']')
 				camera.stop_recording()
+				#subprocess.run(["MP4Box", "-add", outfilename, "-fps", "40", encoded_filename])
 				begin = False
 				t2.join()
 			else:
@@ -888,7 +952,7 @@ def readGPS():
 	
 	
 def loop():
-	global response, begin, stop, OBDtime, newOBD, GPSData, newGPS, myGPS
+	global response, begin, stop, OBDtime, newOBD, GPSData, newGPS, myGPS, selectedCodesString
 	data = ""
 	gps = ""
 	init()

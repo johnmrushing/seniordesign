@@ -19,6 +19,7 @@ class GPS:
 		
 		BAUD_57600 = "$PMTK251,57600*2C\r\n"          #Set Baud Rate at 57600
 		BAUD_9600 ="$PMTK251,9600*17\r\n"             #Set 9600 Baud Rate
+		WAAS_Search ="$PMTK501,2*28\r\n"             #force enable WAAS search
 		
 		ser.write(str.encode(BAUD_57600))
 		sleep(1)
@@ -34,6 +35,9 @@ class GPS:
 		sleep(1)
 		
 		ser.write(str.encode(MEAS_100_msec))
+		sleep(1)
+		
+		ser.write(str.encode(WAAS_Search))
 		sleep(1)
 		
 		ser.write(str.encode(GPRMC_GPGGA)) #We can get away with just GPGGA but GPRMC is helpful, too
