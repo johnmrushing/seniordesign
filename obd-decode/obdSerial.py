@@ -11,6 +11,12 @@ import subprocess
 from gps.gps import GPS
 
 camera = picamera.PiCamera()
+audio_proc= ""
+outfilenamevideo= ""
+outfilenameaudio= ""
+outfilenamemp3= ""
+encoded_filename= ""
+encoded_filename2= ""
 begin = False
 stop = False
 newOBD = False
@@ -855,7 +861,7 @@ def decode(rawData):
         i += (obd_code+1)
 
 def logging(gps, obdTime):
-	global begin, fileName, log, stop, t2, camera
+	global begin, fileName, log, stop, t2, camera, audio_proc, outfilenamevideo, outfilenameaudio, outfilenamemp3, encoded_filename, encoded_filename2
 	sockets.on("start", start_handler)
 	sockets.on("stop", stop_handler)
 	if (begin == True):
@@ -866,7 +872,11 @@ def logging(gps, obdTime):
 			if (stop == True):
 				outfile.write(']')
 				camera.stop_recording()
-				#subprocess.run(["MP4Box", "-add", outfilename, "-fps", "40", encoded_filename])
+				audio_proc.kill()
+				audio_proc=None
+				subprocess.run(["lame", "-V2", outfilenameaudio, outfilenamemp3])
+				subprocess.run(["MP4Box", "-add", outfilenamevideo,"-fps", "40", encoded_filename])
+				subprocess.run(["ffmpeg", "-i", encoded_filename, "-i", outfilenamemp3, "-c","copy", "-map", "0:v:0", "-map", "1:a:0", encoded_filename2])
 				begin = False
 				t2.join()
 			else:
@@ -874,13 +884,18 @@ def logging(gps, obdTime):
 		print("finished logging")
 
 def record():
-	global camera
+	global camera, audio_proc, outfilenamevideo, outfilenameaudio, outfilenamemp3, encoded_filename, encoded_filename2
 	camera.resolution=(1280,720)
 	camera.framerate=40
 	timestamp = '{:%Y-%m-%d_%H-%M-%S}'.format(datetime.datetime.now())
-	outfilename="output-"+timestamp+".h264"
-	encoded_filename="output-"+timestamp+".mp4"
-	camera.start_recording(outfilename)
+	outfilenamevideo="./video/output-"+timestamp+".h264"
+	outfilenameaudio="./video/output-"+timestamp+".wav"
+	outfilenamemp3="./video/output-"+timestamp+".mp3"
+	audio_args=['arecord', '--device=hw:1,0', '-f', 'S16_LE', '-r', '44100', '-c1', outfilenameaudio]
+	encoded_filename="./video/output-"+timestamp+".mp4"
+	encoded_filename2="output_final-"+timestamp+".mp4"
+	audio_proc=subprocess.Popen(audio_args, shell=False, preexec_fn=os.setsid)
+	camera.start_recording(outfilenamevideo)
 	
 def start_handler(msg):
 	global begin, fileName, stop, t2
