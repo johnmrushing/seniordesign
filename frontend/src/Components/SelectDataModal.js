@@ -27,16 +27,16 @@ export class SelectDataModal extends Component {
         return (
             <div>
 
-                <Modal show={this.props.show} onHide={this.handleClose} size="lg"
+                <Modal className={"settingModal"} show={this.props.show} onHide={this.handleClose} size="lg"
                        aria-labelledby="contained-modal-title-vcenter" centered>
 
                     <Modal.Header closeButton>
-                        <Modal.Title id="contained-modal-title-vcenter">Available Data</Modal.Title>
+                        <Modal.Title className = {"Normalfont"} id="contained-modal-title-vcenter">Available Data</Modal.Title>
                     </Modal.Header>
 
                     <Modal.Body>
 
-                        <h4>Select Data:</h4>
+                        <h4 className = {"Normalfont"}>Select Data:</h4>
                         {
                             this.props.possibleCodes ?
                                 (   <div  className={"test"}>
@@ -47,14 +47,12 @@ export class SelectDataModal extends Component {
                                                         {
                                                             (obj === this.props.selectedData) ?
                                                                 <Badge variant="success" onClick={() => {
-                                                                    this.props.onSelect(obj)
-                                                                }}>
+                                                                    this.props.onSelect(obj)}}>
                                                                     {<h6>{obj}</h6>}
                                                                 </Badge>
                                                                 :
                                                                 <Badge variant="primary" onClick={() => {
-                                                                    this.props.onSelect(obj)
-                                                                }}>
+                                                                    this.props.onSelect(obj)}}>
                                                                     {<h6>{obj}</h6>}
                                                                 </Badge>
                                                         }

@@ -19,6 +19,7 @@ export class Header extends Component {
         }
     }
     handleSettingsClick(){
+        socket.emit('profiles')
         this.setState({
             show: true
         });
@@ -45,19 +46,16 @@ export class Header extends Component {
             <div className={"App-header"}>
                 <br/>
                 <div className={"float-left"}>
-                    <Button  variant="secondary" onClick={this.handleSettingsClick}>Settings</Button>&nbsp;&nbsp;
+                    <Button  variant="primary" onClick={this.handleSettingsClick}>Settings</Button>&nbsp;&nbsp;
                     <Button  disabled={this.state.disable} onClick={this.handleClick} variant="primary">Begin Run</Button>&nbsp;&nbsp;
                     <Button  onClick={this.handleStop} variant="primary">Save</Button>
                     {
-                        this.state.show ? <SettingsModal show = {this.state.show} onClick = {this.handleSettingsClick} onClose = {this.handleSettingsClose}/> : null
+                        this.state.show ? <SettingsModal profile={this.props.profile} profileSelect={this.props.profileSelect} video = {this.props.video} layout = {this.props.layout} layoutSelect ={this.props.layoutSelect} videoSelect={this.props.videoSelect} show = {this.state.show} onClick = {this.handleSettingsClick} onClose = {this.handleSettingsClose}/> : null
                     }
                 </div>
                 <div>
-
                     <br></br>
-
                 </div>
-
                 <br/>
             </div>
         )

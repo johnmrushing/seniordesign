@@ -1,11 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Orbitron&display=swap');
 .App {
   text-align: center;
-}
+  }
 .App-header {
-  background-color: white;
+  background-color: #2C2F33;
   text-align: center;
-  color: #282c34;
 }
 .float-left{
   position:absolute;
@@ -18,36 +17,150 @@
 .settingsDiv{
   position: relative;
 }
+.row{
+  justify-content: center;
+}
+.settingModal .modal-content {
+  background-color:#36393f;
+}
+.ProfileButtons{
+  display: flex;
+  flex-direction: row;
+}
+
 .settings{
   position: absolute;
   top: 0;
   left: 0;
   height: 11rem;
-  width: 13rem;
-  opacity: 0;
+  width: 16rem;
+  opacity: 0%;
+}
+.container{
+  max-width: unset;
+}
+.colsize{
+  padding: 5px;
+  margin: 0px;
 }
 .card{
-  height: 11rem;
-  width: 13rem;
+  height: 170px;
+  margin-top: 15px;
+  background-color: #36393f;
 }
 .cardBody{
-
+  padding: 0px;
 }
 .cardFooter{
   padding: unset;
-  height: 25px;
+  height: 30px;
+  position: relative;
 }
 
-.App-link {
-  color: #61dafb;
+.baseRPMdiv{
+  width:540px;
+  height:100px;
+
+}
+.RPMGraphSlider{
+  width:540px;
+  height:50px;
+  display: block;
+  right: 16.3%;
+  position: absolute;
+  alignment: right;
+  background-color:#36393f;
+  /*animation: slide 5s infinite;*/
+
+}
+@keyframes slide {
+  0%{
+    /*animation-direction: reverse;*/
+    width: 67.5%;
+
+
+  }
+  100%{
+
+    width: 0%;
+  }
+
+}
+.RPMGraph{
+  width:540px;
+  height:60px;
+  border: 1px solid;
+  display: grid;
+  grid-template-columns: auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto auto;
+  grid-gap: 2px;
+}
+.RPMGraphNumbers{
+  /*background-image: linear-gradient(to right, yellow,red );*/
+  background-color: #23272a;
+  width:540px;
+  height:50px;
+  display: grid;
+  grid-template-columns: 30px 30px 30px 30px 30px 30px 30px 30px 30px 30px 30px 30px 30px 30px 30px 30px 30px 30px 30px;
+}
+.square1{
+  background-color: #00cc00;
+  /*animation: animate 5s linear infinite;*/
+}
+.square2{
+  background-image: linear-gradient(to right, #00cc00,orange);
+}
+.square3{
+  background-color: orange;
+}
+.square4{
+  background-image: linear-gradient(to right, orange,red );
+}
+.square5{
+  background-color: red;
 }
 
-.test{
-  height: 200px;
-  overflow-y:scroll;
+.square0text{
+  position: relative;
+  color: white;
+  right: 15px;
+  font-size: 25px;
+
+}
+.square1text{
+  position: relative;
+  color: white;
+  right: 15px;
+  font-size: 25px;
+
+}
+.square2text{
+  position: relative;
+  color: red;
+  right: 15px;
+  font-size: 25px;
 }
 
 .font{
   font-family: 'Orbitron', sans-serif;
+  color: white;
+}
+.Normalfont{
+  color: white;
+}
+
+.Datafontsize{
+  font-size: 55px;
+}
+
+.react-toggle {
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.label-text {
+  color: white;
+  vertical-align: middle;
+  font-weight: normal;
+  margin-bottom: 0; /* override bootstrap */
 }
 

@@ -8,9 +8,16 @@ let socket = socketIOClient("http://localhost/");
 export class App extends Component {
     constructor(props) {
         super(props);
+        this.handleLayoutChange = this.handleLayoutChange.bind(this);
+        this.handleVideoChange = this.handleVideoChange.bind(this);
+        this.handleProfileChange= this.handleProfileChange.bind(this);
         this.state = {
-            rawData: null,
-            possibleCodes: null,
+            rawData:undefined,
+            possibleCodes: undefined,
+            layout: true,
+            video : true,
+            profile: 1,
+            savedProfile: [{},{},{},{},{},{}]
         };
     }
     componentDidMount() {
@@ -22,13 +29,49 @@ export class App extends Component {
         socket.on('frontEndPossibleCodes',function(data) {
             console.log(data);
             that.setState({possibleCodes: data});
+            socket.emit('getProfile', this.state.profile);
         });
+        socket.on('frontEndSavedProfile', function (data) {
+            that.setState({savedProfile: data})
+        })
+
+    }
+    handleProfileChange(data){
+        this.setState({profile: data})
+
+    }
+    handleLayoutChange(layout) {
+        if(layout === false){
+            this.setState({
+                layout: true
+            });
+        }
+        else{
+            this.setState({
+                layout: false
+            });
+        }
+
+    }
+    handleVideoChange(video) {
+        socket.emit('VideoSetting', video);
+        if(video === false){
+            this.setState({
+                video: true
+            });
+        }
+        else{
+            this.setState({
+                video: false
+            });
+        }
+
     }
     render() {
         return (
             <div className="App">
-                <Header/>
-                <Telemetry rawData = {this.state.rawData} possibleCodes={this.state.possibleCodes}/>
+                <Header profile={this.state.profile} video = {this.state.video} layout = {this.state.layout} profileSelect={this.handleProfileChange} layoutSelect ={this.handleLayoutChange} videoSelect={this.handleVideoChange}/>
+                <Telemetry savedProfile = {this.state.savedProfile} profile = {this.state.profile} layout = {this.state.layout} rawData = {this.state.rawData} possibleCodes={this.state.possibleCodes}/>
             </div>
         );
     }
