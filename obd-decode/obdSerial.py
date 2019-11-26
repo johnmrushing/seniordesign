@@ -10,13 +10,14 @@ import picamera
 import subprocess
 from gps.gps import GPS
 
-camera = picamera.PiCamera()
+camera = ""
 audio_proc= ""
 outfilenamevideo= ""
 outfilenameaudio= ""
 outfilenamemp3= ""
 encoded_filename= ""
 encoded_filename2= ""
+videoSetting = True;
 begin = False
 stop = False
 newOBD = False
@@ -31,8 +32,8 @@ response = []
 VIN = ""
 t2= ""
 possibleCodes= []
-selectedCodes = ["","","","","",""]
-selectedCodesString = "01"
+selectedCodes = ["","","","Engine RPM","",""]
+selectedCodesString = "01 0C"
 GPSData = ""
 myGPS= GPS()
 
@@ -149,7 +150,7 @@ def possibleCodesScan():
 
 def CEL_Decode():
     A = int(obd_string[i+1],16)
-    OBD_data = float(100/255)*A
+    OBD_data = round(float(100/255)*A,3)
     OBD_LOG['Calculated Engine Load'] = OBD_data
 
 def ECT_Decode():
@@ -159,22 +160,22 @@ def ECT_Decode():
 
 def STFTB1_Decode():
 	A = int(obd_string[i+1],16)
-	OBD_data = (float(100/255)*A) - 100
+	OBD_data = round((float(100/255)*A) - 100,3)
 	OBD_LOG['Short Term Fuel Trim-Bank 1'] = OBD_data
 	
 def LTFTB1_Decode():
 	A = int(obd_string[i+1],16)
-	OBD_data = (float(100/255)*A) - 100
+	OBD_data = round((float(100/255)*A) - 100,3)
 	OBD_LOG['Long Term Fuel Trim-Bank 1'] = OBD_data
 	
 def STFTB2_Decode():
 	A = int(obd_string[i+1],16)
-	OBD_data = (float(100/255)*A) - 100
+	OBD_data = (round(float(100/255)*A) - 100,3)
 	OBD_LOG['Short Term Fuel Trim-Bank 2'] = OBD_data
 	
 def LTFTB2_Decode():
 	A = int(obd_string[i+1],16)
-	OBD_data = (float(100/255)*A) - 100
+	OBD_data = round((float(100/255)*A) - 100,3)
 	OBD_LOG['Long Term Fuel Trim-Bank 2'] = OBD_data
 	
 def FPGP_Decode():
@@ -185,7 +186,7 @@ def FPGP_Decode():
 def RPM_Decode():
     A = int(obd_string[i+1],16)
     B = int(obd_string[i+2],16)
-    OBD_data = (256*A+B)/4
+    OBD_data = round((256*A+B)/4)
     OBD_LOG['Engine RPM'] = OBD_data
     
 def MPH_Decode():
@@ -219,7 +220,7 @@ def OSVSTFTB1_Decode():
 	A = int(obd_string[i+1],16)
 	B = int(obd_string[i+2],16)
 	OBD_data_1 = A/200
-	OBD_data_2 = (float(100/128)*B)-100
+	OBD_data_2 = round((float(100/128)*B)-100,3)
 	OBD_LOG['Oxygen Sensor 1: Voltage'] = OBD_data_1
 	OBD_LOG['Oxygen Sensor 1: Short Term Fuel Trim'] = OBD_data_2
 	
@@ -227,7 +228,7 @@ def OSVSTFTB2_Decode():
 	A = int(obd_string[i+1],16)
 	B = int(obd_string[i+2],16)
 	OBD_data_1 = A/200
-	OBD_data_2 = (float(100/128)*B)-100
+	OBD_data_2 = round((float(100/128)*B)-100,3)
 	OBD_LOG['Oxygen Sensor 2: Voltage'] = OBD_data_1
 	OBD_LOG['Oxygen Sensor 2: Short Term Fuel Trim'] = OBD_data_2
 
@@ -235,7 +236,7 @@ def OSVSTFTB3_Decode():
 	A = int(obd_string[i+1],16)
 	B = int(obd_string[i+2],16)
 	OBD_data_1 = A/200
-	OBD_data_2 = (float(100/128)*B)-100
+	OBD_data_2 = round((float(100/128)*B)-100,3)
 	OBD_LOG['Oxygen Sensor 3: Voltage'] = OBD_data_1
 	OBD_LOG['Oxygen Sensor 3: Short Term Fuel Trim'] = OBD_data_2
 	
@@ -243,7 +244,7 @@ def OSVSTFTB4_Decode():
 	A = int(obd_string[i+1],16)
 	B = int(obd_string[i+2],16)
 	OBD_data_1 = A/200
-	OBD_data_2 = (float(100/128)*B)-100
+	OBD_data_2 = round((float(100/128)*B)-100,3)
 	OBD_LOG['Oxygen Sensor 4: Voltage'] = OBD_data_1
 	OBD_LOG['Oxygen Sensor 4: Short Term Fuel Trim'] = OBD_data_2
 
@@ -251,7 +252,7 @@ def OSVSTFTB5_Decode():
 	A = int(obd_string[i+1],16)
 	B = int(obd_string[i+2],16)
 	OBD_data_1 = A/200
-	OBD_data_2 = (float(100/128)*B)-100
+	OBD_data_2 = round((float(100/128)*B)-100,3)
 	OBD_LOG['Oxygen Sensor 5: Voltage'] = OBD_data_1
 	OBD_LOG['Oxygen Sensor 5: Short Term Fuel Trim'] = OBD_data_2
 	
@@ -259,7 +260,7 @@ def OSVSTFTB6_Decode():
 	A = int(obd_string[i+1],16)
 	B = int(obd_string[i+2],16)
 	OBD_data_1 = A/200
-	OBD_data_2 = (float(100/128)*B)-100
+	OBD_data_2 = round((float(100/128)*B)-100,3)
 	OBD_LOG['Oxygen Sensor 6: Voltage'] = OBD_data_1
 	OBD_LOG['Oxygen Sensor 6: Short Term Fuel Trim'] = OBD_data_2
 	
@@ -267,7 +268,7 @@ def OSVSTFTB7_Decode():
 	A = int(obd_string[i+1],16)
 	B = int(obd_string[i+2],16)
 	OBD_data_1 = A/200
-	OBD_data_2 = (float(100/128)*B)-100
+	OBD_data_2 = round((float(100/128)*B)-100,3)
 	OBD_LOG['Oxygen Sensor 7: Voltage'] = OBD_data_1
 	OBD_LOG['Oxygen Sensor 7: Short Term Fuel Trim'] = OBD_data_2
 
@@ -275,7 +276,7 @@ def OSVSTFTB8_Decode():
 	A = int(obd_string[i+1],16)
 	B = int(obd_string[i+2],16)
 	OBD_data_1 = A/200
-	OBD_data_2 = (float(100/128)*B)-100
+	OBD_data_2 = round((float(100/128)*B)-100,3)
 	OBD_LOG['Oxygen Sensor 8: Voltage'] = OBD_data_1
 	OBD_LOG['Oxygen Sensor 8: Short Term Fuel Trim'] = OBD_data_2
 
@@ -294,7 +295,7 @@ def DTWMILO_Decode():
 def FRP_Decode():
     A = int(obd_string[i+1],16)
     B = int(obd_string[i+2],16)
-    OBD_data = 0.079*(256*A+B)
+    OBD_data = round(0.079*(256*A+B),3)
     OBD_LOG['Fuel Rail Pressure'] = OBD_data
 	
 def FRGP_Decode():
@@ -308,8 +309,8 @@ def OSABCDFAERVB1_Decode():
 	B = int(obd_string[i+2],16)
 	C = int(obd_string[i+2],16)
 	D = int(obd_string[i+2],16)
-	OBD_data_1 = float(2/65536)*(256*A+B)
-	OBD_data_2 = float(8/65536)*(256*C+D)
+	OBD_data_1 = round(float(2/65536)*(256*A+B),3)
+	OBD_data_2 = round(float(8/65536)*(256*C+D),3)
 	OBD_LOG['Oxygen Sensor 1 AB: Fuel-Air Equivalence Ratio'] = OBD_data_1
 	OBD_LOG['Oxygen Sensor 1 CD: Voltage'] = OBD_data_2
 
@@ -318,8 +319,8 @@ def OSABCDFAERVB5_Decode():
 	B = int(obd_string[i+2],16)
 	C = int(obd_string[i+2],16)
 	D = int(obd_string[i+2],16)
-	OBD_data_1 = float(2/65536)*(256*A+B)
-	OBD_data_2 = float(8/65536)*(256*C+D)
+	OBD_data_1 = round(float(2/65536)*(256*A+B),3)
+	OBD_data_2 = round(float(8/65536)*(256*C+D),3)
 	OBD_LOG['Oxygen Sensor 1 AB: Fuel-Air Equivalence Ratio'] = OBD_data_1
 	OBD_LOG['Oxygen Sensor 1 CD: Voltage'] = OBD_data_2
 	
@@ -328,8 +329,8 @@ def OSABCDFAERVB6_Decode():
 	B = int(obd_string[i+2],16)
 	C = int(obd_string[i+2],16)
 	D = int(obd_string[i+2],16)
-	OBD_data_1 = float(2/65536)*(256*A+B)
-	OBD_data_2 = float(8/65536)*(256*C+D)
+	OBD_data_1 = round(float(2/65536)*(256*A+B),3)
+	OBD_data_2 = round(float(8/65536)*(256*C+D),3)
 	OBD_LOG['Oxygen Sensor 1 AB: Fuel-Air Equivalence Ratio'] = OBD_data_1
 	OBD_LOG['Oxygen Sensor 1 CD: Voltage'] = OBD_data_2
 	
@@ -338,29 +339,29 @@ def OSABCDFAERVB8_Decode():
 	B = int(obd_string[i+2],16)
 	C = int(obd_string[i+2],16)
 	D = int(obd_string[i+2],16)
-	OBD_data_1 = float(2/65536)*(256*A+B)
-	OBD_data_2 = float(8/65536)*(256*C+D)
+	OBD_data_1 = round(float(2/65536)*(256*A+B),3)
+	OBD_data_2 = round(float(8/65536)*(256*C+D),3)
 	OBD_LOG['Oxygen Sensor 1 AB: Fuel-Air Equivalence Ratio'] = OBD_data_1
 	OBD_LOG['Oxygen Sensor 1 CD: Voltage'] = OBD_data_2
 	
 def CEGR_Decode():
     A = int(obd_string[i+1],16)
-    OBD_data = float(100/255)*A
+    OBD_data = round(float(100/255)*A,3)
     OBD_LOG['Commanded EGR'] = OBD_data
 
 def EGRE_Decode():
     A = int(obd_string[i+1],16)
-    OBD_data = float(100/255)*A - 100
+    OBD_data = round(float(100/255)*A - 100,3)
     OBD_LOG['EGR Error'] = OBD_data
 	
 def CEP_Decode():
     A = int(obd_string[i+1],16)
-    OBD_data = float(100/255)*A
+    OBD_data = round(float(100/255)*A,3)
     OBD_LOG['Commanded Evaporative Purge'] = OBD_data
 
 def FTLI_Decode():
 	A = int(obd_string[i+1],16)
-	OBD_data = float(100/255)*A
+	OBD_data = round(float(100/255)*A,3)
 	OBD_LOG['Fuel Tank Level Input'] = OBD_data
 
 def WUSCC_Decode():
@@ -390,7 +391,7 @@ def OSABCDFAERCB1_Decode():
 	B = int(obd_string[i+2],16)
 	C = int(obd_string[i+2],16)
 	D = int(obd_string[i+2],16)
-	OBD_data_1 = float(2/65536)*(256*A+B)
+	OBD_data_1 = round(float(2/65536)*(256*A+B),3)
 	OBD_data_2 = C + (D/256) - 128
 	OBD_LOG['Oxygen Sensor 1 AB: Fuel-Air Equivalence Ratio 2'] = OBD_data_1
 	OBD_LOG['Oxygen Sensor 1 CD: Voltage'] = OBD_data_2
@@ -400,7 +401,7 @@ def OSABCDFAERCB2_Decode():
 	B = int(obd_string[i+2],16)
 	C = int(obd_string[i+2],16)
 	D = int(obd_string[i+2],16)
-	OBD_data_1 = float(2/65536)*(256*A+B)
+	OBD_data_1 = round(float(2/65536)*(256*A+B),3)
 	OBD_data_2 = C + (D/256) - 128
 	OBD_LOG['Oxygen Sensor 2 AB: Fuel-Air Equivalence Ratio 2'] = OBD_data_1
 	OBD_LOG['Oxygen Sensor 2 CD: Voltage'] = OBD_data_2
@@ -410,7 +411,7 @@ def OSABCDFAERCB3_Decode():
 	B = int(obd_string[i+2],16)
 	C = int(obd_string[i+2],16)
 	D = int(obd_string[i+2],16)
-	OBD_data_1 = float(2/65536)*(256*A+B)
+	OBD_data_1 = round(float(2/65536)*(256*A+B),3)
 	OBD_data_2 = C + (D/256) - 128
 	OBD_LOG['Oxygen Sensor 3 AB: Fuel-Air Equivalence Ratio 2'] = OBD_data_1
 	OBD_LOG['Oxygen Sensor 3 CD: Voltage'] = OBD_data_2
@@ -420,7 +421,7 @@ def OSABCDFAERCB4_Decode():
 	B = int(obd_string[i+2],16)
 	C = int(obd_string[i+2],16)
 	D = int(obd_string[i+2],16)
-	OBD_data_1 = float(2/65536)*(256*A+B)
+	OBD_data_1 = round(float(2/65536)*(256*A+B),3)
 	OBD_data_2 = C + (D/256) - 128
 	OBD_LOG['Oxygen Sensor 4 AB: Fuel-Air Equivalence Ratio 2'] = OBD_data_1
 	OBD_LOG['Oxygen Sensor 4 CD: Voltage'] = OBD_data_2
@@ -430,7 +431,7 @@ def OSABCDFAERCB5_Decode():
 	B = int(obd_string[i+2],16)
 	C = int(obd_string[i+2],16)
 	D = int(obd_string[i+2],16)
-	OBD_data_1 = float(2/65536)*(256*A+B)
+	OBD_data_1 = round(float(2/65536)*(256*A+B),3)
 	OBD_data_2 = C + (D/256) - 128
 	OBD_LOG['Oxygen Sensor 5 AB: Fuel-Air Equivalence Ratio 2'] = OBD_data_1
 	OBD_LOG['Oxygen Sensor 5 CD: Voltage'] = OBD_data_2
@@ -440,7 +441,7 @@ def OSABCDFAERCB6_Decode():
 	B = int(obd_string[i+2],16)
 	C = int(obd_string[i+2],16)
 	D = int(obd_string[i+2],16)
-	OBD_data_1 = float(2/65536)*(256*A+B)
+	OBD_data_1 = round(float(2/65536)*(256*A+B),3)
 	OBD_data_2 = C + (D/256) - 128
 	OBD_LOG['Oxygen Sensor 6 AB: Fuel-Air Equivalence Ratio 2'] = OBD_data_1
 	OBD_LOG['Oxygen Sensor 6 CD: Voltage'] = OBD_data_2
@@ -450,7 +451,7 @@ def OSABCDFAERCB7_Decode():
 	B = int(obd_string[i+2],16)
 	C = int(obd_string[i+2],16)
 	D = int(obd_string[i+2],16)
-	OBD_data_1 = float(2/65536)*(256*A+B)
+	OBD_data_1 = round(float(2/65536)*(256*A+B),3)
 	OBD_data_2 = C + (D/256) - 128
 	OBD_LOG['Oxygen Sensor 7 AB: Fuel-Air Equivalence Ratio 2'] = OBD_data_1
 	OBD_LOG['Oxygen Sensor 7 CD: Voltage'] = OBD_data_2
@@ -460,7 +461,7 @@ def OSABCDFAERCB8_Decode():
 	B = int(obd_string[i+2],16)
 	C = int(obd_string[i+2],16)
 	D = int(obd_string[i+2],16)
-	OBD_data_1 = float(2/65536)*(256*A+B)
+	OBD_data_1 = round(float(2/65536)*(256*A+B),3)
 	OBD_data_2 = C + (D/256) - 128
 	OBD_LOG['Oxygen Sensor 8 AB: Fuel-Air Equivalence Ratio 2'] = OBD_data_1
 	OBD_LOG['Oxygen Sensor 8 CD: Voltage'] = OBD_data_2
@@ -498,18 +499,18 @@ def CMV_Decode():
 def ALV_Decode():
 	A = int(obd_string[i+1],16)
 	B = int(obd_string[i+2],16)
-	OBD_data = float(100/255)*(256*A+B)
+	OBD_data = round(float(100/255)*(256*A+B),3)
 	OBD_LOG['Absolute Load Value'] = OBD_data
 	
 def FACER_Decode():
 	A = int(obd_string[i+1],16)
 	B = int(obd_string[i+2],16)
-	OBD_data = float(2/65536)*(256*A+B)
+	OBD_data = round(float(2/65536)*(256*A+B),3)
 	OBD_LOG['Fuel-Air Commanded Equivalence Ratio'] = OBD_data
 	
 def RTP_Decode():
 	A = int(obd_string[i+1],16)
-	OBD_data = float(100/255)*A
+	OBD_data = round(float(100/255)*A,3)
 	OBD_LOG['Relative Throttle Position'] = OBD_data
 	
 def AAT_Decode():
@@ -519,32 +520,32 @@ def AAT_Decode():
 	
 def ATPB_Decode():
 	A = int(obd_string[i+1],16)
-	OBD_data = float(100/255)*A
+	OBD_data = round(float(100/255)*A,3)
 	OBD_LOG['Absolute Throttle Position B'] = OBD_data
 
 def ATPC_Decode():
 	A = int(obd_string[i+1],16)
-	OBD_data = float(100/255)*A
+	OBD_data = round(float(100/255)*A,3)
 	OBD_LOG['Absolute Throttle Position C'] = OBD_data	
 
 def APPD_Decode(): 
 	A = int(obd_string[i+1],16)
-	OBD_data = float(100/255)*A
+	OBD_data = round(float(100/255)*A,3)
 	OBD_LOG['Absolute Throttle Position D'] = OBD_data
 	
 def APPE_Decode():
 	A = int(obd_string[i+1],16)
-	OBD_data = float(100/255)*A
+	OBD_data = round(float(100/255)*A,3)
 	OBD_LOG['Absolute Throttle Position E'] = OBD_data
 
 def APPF_Decode():
 	A = int(obd_string[i+1],16)
-	OBD_data = float(100/255)*A
+	OBD_data = round(float(100/255)*A,3)
 	OBD_LOG['Absolute Throttle Position F'] = OBD_data
 	
 def CTA_Decode():
 	A = int(obd_string[i+1],16)
-	OBD_data = float(100/255)*A
+	OBD_data = round(float(100/255)*A,3)
 	OBD_LOG['Commanded Throttle Actuator'] = OBD_data
 	
 def TRWMILO_Decode():
@@ -556,7 +557,7 @@ def TRWMILO_Decode():
 def TSTCC_Decode():
 	A = int(obd_string[i+1],16)
 	B = int(obd_string[i+2],16)
-	OBD_data = float(2/65536)*(256*A+B)
+	OBD_data = round(float(2/65536)*(256*A+B),3)
 	OBD_LOG['Time Since Trouble Codes Cleared'] = OBD_data
 
 def MVFFAEROSVOSCAIMAP_Decode():
@@ -580,7 +581,7 @@ def MVFAFRFMAFS_Decode():
 
 def EF_Decode(): 
 	A = int(obd_string[i+1],16)
-	OBD_data = float(100/255)*A
+	OBD_data = round(float(100/255)*A,3)
 	OBD_LOG['Ethanol Fuel Percent'] = OBD_data
 	
 def AESVP_Decode(): 
@@ -598,32 +599,32 @@ def ESVP_Decode():
 def STSOSTAB1BB3_Decode():
 	A = int(obd_string[i+1],16)
 	B = int(obd_string[i+2],16)
-	OBD_data_1 = (float(100/128)*A)-100
-	OBD_data_2 = (float(100/128)*B)-100
+	OBD_data_1 = round((float(100/128)*A)-100,3)
+	OBD_data_2 = round((float(100/128)*B)-100,3)
 	OBD_LOG['Short Term Secondary Oxygen Sensor Trim, A: Bank 1'] = OBD_data_1
 	OBD_LOG['Short Term Secondary Oxygen Sensor Trim, B: Bank 3'] = OBD_data_2
 	
 def LTSOSTAB1BB3_Decode():
 	A = int(obd_string[i+1],16)
 	B = int(obd_string[i+2],16)
-	OBD_data_1 = (float(100/128)*A)-100
-	OBD_data_2 = (float(100/128)*B)-100
+	OBD_data_1 = round((float(100/128)*A)-100,3)
+	OBD_data_2 = round((float(100/128)*B)-100,3)
 	OBD_LOG['Long Term Secondary Oxygen Sensor Trim, A: Bank 1'] = OBD_data_1
 	OBD_LOG['Long Term Secondary Oxygen Sensor Trim, B: bank 3'] = OBD_data_2
 	
 def STSOSTAB2BB4_Decode():
 	A = int(obd_string[i+1],16)
 	B = int(obd_string[i+2],16)
-	OBD_data_1 = (float(100/128)*A)-100
-	OBD_data_2 = (float(100/128)*B)-100
+	OBD_data_1 = round((float(100/128)*A)-100,3)
+	OBD_data_2 = round((float(100/128)*B)-100,3)
 	OBD_LOG['Short Term Secondary Oxygen Sensor Trim, A: bank 2'] = OBD_data_1
 	OBD_LOG['Short Term Secondary Oxygen Sensor Trim, B: bank 4'] = OBD_data_2
 	
 def LTSOSTAB2BB4_Decode():
 	A = int(obd_string[i+1],16)
 	B = int(obd_string[i+2],16)
-	OBD_data_1 = (float(100/128)*A)-100
-	OBD_data_2 = (float(100/128)*B)-100
+	OBD_data_1 = round((float(100/128)*A)-100,3)
+	OBD_data_2 = round((float(100/128)*B)-100,3)
 	OBD_LOG['Long Term Secondary Oxygen Sensor Trim, A: bank 2'] = OBD_data_1
 	OBD_LOG['Long Term Secondary Oxygen Sensor Trim, B: bank 4'] = OBD_data_2
 	
@@ -635,12 +636,12 @@ def FRAP_Decode():
 
 def RAPP_Decode():
 	A = int(obd_string[i+1],16)
-	OBD_data = (100/255)*A
+	OBD_data = round((100/255)*A,3)
 	OBD_LOG['Relative Accelerator Pedal Position'] = OBD_data
 	
 def HBPRL_Decode():
 	A = int(obd_string[i+1],16)
-	OBD_data = (100/255)*A
+	OBD_data = round((100/255)*A,3)
 	OBD_LOG['Hybrid Battery Pack Remaining Life'] = OBD_data
 	
 def EOT_Decode():
@@ -861,7 +862,7 @@ def decode(rawData):
         i += (obd_code+1)
 
 def logging(gps, obdTime):
-	global begin, fileName, log, stop, t2, camera, audio_proc, outfilenamevideo, outfilenameaudio, outfilenamemp3, encoded_filename, encoded_filename2
+	global begin, fileName, log, stop, t2, camera, audio_proc, outfilenamevideo, outfilenameaudio, outfilenamemp3, encoded_filename, encoded_filename2, videoSetting
 	sockets.on("start", start_handler)
 	sockets.on("stop", stop_handler)
 	if (begin == True):
@@ -871,14 +872,15 @@ def logging(gps, obdTime):
 			json.dump(OBD_LOG, outfile)
 			if (stop == True):
 				outfile.write(']')
-				camera.stop_recording()
-				audio_proc.kill()
-				audio_proc=None
-				subprocess.run(["lame", "-V2", outfilenameaudio, outfilenamemp3])
-				subprocess.run(["MP4Box", "-add", outfilenamevideo,"-fps", "40", encoded_filename])
-				subprocess.run(["ffmpeg", "-i", encoded_filename, "-i", outfilenamemp3, "-c","copy", "-map", "0:v:0", "-map", "1:a:0", encoded_filename2])
+				if(videoSetting == True):
+					camera.stop_recording()
+					audio_proc.kill()
+					audio_proc=None
+					subprocess.run(["lame", "-V2", outfilenameaudio, outfilenamemp3])
+					subprocess.run(["MP4Box", "-add", outfilenamevideo,"-fps", "40", encoded_filename])
+					subprocess.run(["ffmpeg", "-i", encoded_filename, "-i", outfilenamemp3, "-c","copy", "-map", "0:v:0", "-map", "1:a:0", encoded_filename2])
+					t2.join()
 				begin = False
-				t2.join()
 			else:
 				outfile.write(',')
 		print("finished logging")
@@ -896,14 +898,21 @@ def record():
 	encoded_filename2="output_final-"+timestamp+".mp4"
 	audio_proc=subprocess.Popen(audio_args, shell=False, preexec_fn=os.setsid)
 	camera.start_recording(outfilenamevideo)
+
+def video_handler(msg):
+	global videoSetting
+	print(msg)
+	videoSetting = msg
 	
 def start_handler(msg):
-	global begin, fileName, stop, t2
+	global begin, fileName, stop, t2, videoSetting, camera
 	print('test: ', msg)
 	begin = msg
 	stop = False
-	t2 = threading.Thread(target=record)
-	t2.start()
+	if (videoSetting == True):
+		camera = picamera.PiCamera()
+		t2 = threading.Thread(target=record)
+		t2.start()
 	fileName = str(datetime.datetime.now().strftime("%Y-%m-%d %H.%M.%S"))
 	with open(str("logs/" + fileName + ".json"), 'a') as outfile:
 		outfile.write('[')
@@ -974,6 +983,7 @@ def loop():
 	t1 = threading.Thread(target=readGPS)
 	t1.start()
 	sockets.on("selectedCodes", selectedCodes_handler)
+	sockets.on("backendVideoSettings", video_handler)
 	while(selectedCodes == ["","","","","",""]):
 		print("waiting for user selection")
 		time.sleep(6)

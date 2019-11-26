@@ -11,7 +11,6 @@ export class Telemetry extends Component {
         super(props);
         this.state = {
             rawData: this.props.rawData,
-            savedProfile: this.props.savedProfile
         };
     }
 
@@ -21,13 +20,13 @@ export class Telemetry extends Component {
                 <Container className = {"container"}>
                     <Row className="justify-content-md-center">
                         <Col className = {"colsize"}>
-                            <TelemetryCard layout = {this.props.layout} savedProfile = {this.props.savedProfile} profile={this.props.profile} possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} listID = {0} key = {0}/>
+                            <TelemetryCard layout = {this.props.layout} profile={this.props.profile} possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} listID = {0} key = {0}/>
                         </Col>
                         <Col className = {"colsize"}>
-                            <TelemetryCard layout = {this.props.layout} savedProfile = {this.props.savedProfile} profile={this.props.profile} possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} listID = {1} key = {1}/>
+                            <TelemetryCard layout = {this.props.layout} profile={this.props.profile} possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} listID = {1} key = {1}/>
                         </Col>
                         <Col className = {"colsize"}>
-                            <TelemetryCard layout = {this.props.layout} savedProfile = {this.props.savedProfile} profile={this.props.profile} possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} listID = {2} key = {2}/>
+                            <TelemetryCard layout = {this.props.layout} profile={this.props.profile} possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} listID = {2} key = {2}/>
                         </Col>
                     </Row>
 
@@ -35,10 +34,10 @@ export class Telemetry extends Component {
                             (this.props.layout === false) ?
                                 <Row className="justify-content-md-center">
                                     <Col className = {"colsize"}>
-                                        <TelemetryCard layout = {this.props.layout} savedProfile = {this.props.savedProfile} profile={this.props.profile} possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} listID = {4} key = {4}/>
+                                        <TelemetryCard layout = {this.props.layout} profile={this.props.profile} possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} listID = {4} key = {4}/>
                                     </Col>
                                     <Col className = {"colsize"}>
-                                        <TelemetryCard layout = {this.props.layout} savedProfile = {this.props.savedProfile} profile={this.props.profile} possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} listID = {5} key = {5}/>
+                                        <TelemetryCard layout = {this.props.layout} profile={this.props.profile} possibleCodes = {this.props.possibleCodes} rawData = {this.props.rawData} listID = {5} key = {5}/>
                                     </Col>
                                 </Row>
                             :
@@ -47,7 +46,7 @@ export class Telemetry extends Component {
                                     <br/>
                                     <br/>
                                     <Row className="justify-content-md-center">
-                                        <RPMGraph rawData = {this.props.rawData} listID = {3} key = {3}/>
+                                        <RPMGraph listID = {3} key = {3}/>
                                     </Row>
                                 </div>
                         }

@@ -34,7 +34,7 @@
   left: 0;
   height: 11rem;
   width: 16rem;
-  opacity: 0%;
+  opacity: 0;
 }
 .container{
   max-width: unset;
@@ -66,25 +66,11 @@
   width:540px;
   height:50px;
   display: block;
-  right: 16.3%;
+  right: 16.4%;
   position: absolute;
   alignment: right;
   background-color:#36393f;
-  /*animation: slide 5s infinite;*/
-
-}
-@keyframes slide {
-  0%{
-    /*animation-direction: reverse;*/
-    width: 67.5%;
-
-
-  }
-  100%{
-
-    width: 0%;
-  }
-
+  
 }
 .RPMGraph{
   width:540px;

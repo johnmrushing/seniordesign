@@ -1,20 +1,27 @@
 import React, {Component} from 'react';
+import socketIOClient from "socket.io-client";
+let socket = socketIOClient("http://localhost/");
 
 export class RPMGraph extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            rawData: this.props.rawData,
+            rawData: undefined,
             width: 0
         };
     }
 
     componentDidMount() {
-        if(this.props.rawData !== undefined){
-            this.setState({
-                width: ((1-(this.props.rawData["Engine RPM"]/9000))*100)*0.675
-            });
-        }
+		let that = this
+		socket.on('obd-out',function(data) {
+            console.log(data);
+            that.setState({rawData: JSON.parse(data)}, () =>{
+				if(that.state.rawData !== undefined){
+					that.setState({width: ((1-(that.state.rawData["Engine RPM"]/9000))*100)*0.675})
+
+				}
+			})
+        });
     }
 
 

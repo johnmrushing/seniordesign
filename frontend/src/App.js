@@ -29,7 +29,7 @@ export class App extends Component {
         socket.on('frontEndPossibleCodes',function(data) {
             console.log(data);
             that.setState({possibleCodes: data});
-            socket.emit('getProfile', this.state.profile);
+            socket.emit('getProfile', that.state.profile);
         });
         socket.on('frontEndSavedProfile', function (data) {
             that.setState({savedProfile: data})
@@ -54,17 +54,17 @@ export class App extends Component {
 
     }
     handleVideoChange(video) {
-        socket.emit('VideoSetting', video);
         if(video === false){
-            this.setState({
-                video: true
-            });
+            this.setState({video: true},() => {
+            socket.emit('VideoSetting', this.state.video);
+			});
         }
         else{
-            this.setState({
-                video: false
-            });
+            this.setState({video: false},() => {
+            socket.emit('VideoSetting', this.state.video);
+			});
         }
+		
 
     }
     render() {

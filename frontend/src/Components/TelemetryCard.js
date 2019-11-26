@@ -139,32 +139,34 @@ export class TelemetryCard extends Component {
     }
 
     updateSelectedData2(obj){
-        this.setState({selectedData:obj})
-            console.log("hehe")
+		
+        this.setState({selectedData:obj},() => {
             socket.emit('userSelectedCodes', {listID: this.props.listID, data: this.state.selectedData});
-
+           
+        });
     }
 
 
+	componentDidMount() {
+		let that = this;
+		socket.on('frontEndSavedProfile', function (data) {
+			if(that.props.possibleCodes.includes(data[that.props.listID].data)){
+				that.setState({savedProfile: data[that.props.listID]},() => {
+					that.updateSelectedData2(that.state.savedProfile.data)
+				
+				});
+			}
+			else{
+				that.setState({savedProfile: {}});
+			}
+		})
+	}
 
-
-    componentWillReceiveProps(nextProps) {
-        if(this.props !== nextProps) {
-            if(this.props.rawData !== undefined)
-            {
-                this.setState({
-                    savedProfile: nextProps.savedProfile
-                });
-                this.updateSelectedData2(nextProps.savedProfile[this.props.listID].data)
-
-            }
-
-        }
-    }
-
-
+   
     render() {
+		console.log("TEST" + this.state.selectedData)
         return (
+
             <Card className = {"card"}>
                 <SelectDataButton possibleCodes = {this.props.possibleCodes} selectedRawData = {this.state.selectedData} selectedData = {this.updateSelectedData}/>
 
@@ -172,14 +174,16 @@ export class TelemetryCard extends Component {
 
                 <Card.Body className={"cardBody"}>
                     {
-                        (((this.state.selectedData!== undefined) ) && this.props.rawData!== undefined) ?
-                            <p className={"font"}>
+                        ((this.state.selectedData!== undefined) && this.props.rawData!== undefined) ?
+                            
+							<p className={"font"}>
                                 {
+									
                                     <h1 className={"Datafontsize"}>{this.props.rawData[this.state.selectedData]}</h1>
                                 }
                             </p >
 
-                            : (this.props.layout === false && this.props.listID > 3) ? (this.updateSelectedData2(this.props.savedProfile[this.props.listID].data))
+                            : (this.props.layout === false && this.props.listID > 3 && this.state.selectedData !== undefined) ? (this.updateSelectedData2(this.state.savedProfile.data))
 
                             :  (<p className={"font"}>Click to Select Data</p>)
 
