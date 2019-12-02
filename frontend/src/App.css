@@ -57,18 +57,29 @@
   position: relative;
 }
 
-.baseRPMdiv{
+.RPMDigital{
   width:540px;
-  height:100px;
+  height:50px;
+  font-size: 40px;
+  color: white;
 
 }
+.RPMGraphLabel{
+  width: 50px;
+  height: 60px;
+  position: absolute;
+  left: 75px;
+  color: white;
+  font-size: 20px;
+  word-wrap: break-spaces;
+}
+
 .RPMGraphSlider{
   width:540px;
   height:50px;
   display: block;
   right: 16.4%;
   position: absolute;
-  alignment: right;
   background-color:#36393f;
   
 }

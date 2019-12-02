@@ -96,7 +96,6 @@ export class SettingsModal extends Component {
                                     null
                                 }
                             </DropdownButton>
-
                         </div>
                         <br/>
                         <Toggle icons={false} onChange={this.handleLayoutChange} defaultChecked={this.state.layout}/>

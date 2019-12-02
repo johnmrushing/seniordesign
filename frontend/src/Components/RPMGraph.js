@@ -30,11 +30,13 @@ export class RPMGraph extends Component {
     render() {
         return (
             <div>
+                <div className={"RPMDigital"}>{(this.state.rawData !== undefined)? this.state.rawData["Engine RPM"] : 0} </div>
+                <br/>
+                <div className={"RPMGraphLabel"}>RPM/ 1000</div>
 
                 <div className={"RPMGraphSlider"} style={{width:this.state.width + "%"}}/>
 
                 <div className={"RPMGraph"}>
-
                     <div className={"square1"}/>
                     <div className={"square1"}/>
                     <div className={"square1"}/>
@@ -53,8 +55,8 @@ export class RPMGraph extends Component {
                     <div className={"square4"}/>
                     <div className={"square5"}/>
                     <div className={"square5"}/>
-
                 </div>
+
                 <div className={"RPMGraphNumbers"}>
                     <div className={"square0text"}>0</div>
                     <div></div>

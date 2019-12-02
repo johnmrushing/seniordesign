@@ -44,7 +44,6 @@ export class Telemetry extends Component {
                                 <div>
                                     <br/>
                                     <br/>
-                                    <br/>
                                     <Row className="justify-content-md-center">
                                         <RPMGraph listID = {3} key = {3}/>
                                     </Row>
